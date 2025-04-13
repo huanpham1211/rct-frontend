@@ -30,17 +30,17 @@ const LoginPage = () => {
   return (
     <div className="login-container">
       <form onSubmit={handleLogin} className="login-box">
-        <h2>RCT System Login</h2>
+        <h2>Hệ thống quản lý RCT</h2>
         <input
           type="text"
-          placeholder="Username"
+          placeholder="Tên đăng nhập"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
         />
         <input
           type="password"
-          placeholder="Password"
+          placeholder="Mật khẩu"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
