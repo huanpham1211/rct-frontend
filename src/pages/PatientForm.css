@@ -1,0 +1,85 @@
+.patient-form-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+  }
+  
+  .patient-form {
+    width: 100%;
+    max-width: 500px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .patient-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .patient-form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+  }
+  
+  .patient-form input,
+  .patient-form select {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  .patient-form button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #0077cc;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .patient-form button:hover {
+    background-color: #005fa3;
+  }
+  
+  .para-input {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .para-digit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .para-digit button {
+    width: 30px;
+    height: 30px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 2px;
+    border-radius: 4px;
+  }
+  
+  .para-digit div {
+    font-size: 18px;
+    padding: 5px;
+  }
+  
+  .form-message {
+    text-align: center;
+    margin-top: 15px;
+    font-weight: 500;
+  }
+  
