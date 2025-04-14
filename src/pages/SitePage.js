@@ -4,7 +4,7 @@ import './SitePage.css';
 
 const SitePage = () => {
   const [sites, setSites] = useState([]);
-  const [formData, setFormData] = useState({ name: '', address: '' });
+  const [formData, setFormData] = useState({ name: '', location: '' });
   const [message, setMessage] = useState('');
 
   const token = localStorage.getItem('token');
@@ -96,8 +96,8 @@ const SitePage = () => {
             <input
               type="text"
               placeholder="Địa chỉ"
-              value={formData.address}
-              onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+              value={formData.location}
+              onChange={(e) => setFormData({ ...formData, location: e.target.value })}
               required
             />
             <button type="submit">➕ Thêm cơ sở</button>
