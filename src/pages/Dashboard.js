@@ -9,14 +9,10 @@ const Dashboard = () => {
   return (
     <div className="dashboard-container">
       <Header />
-
-      <div className="dashboard-header">Dashboard</div>
-
       <div className="dashboard-section">
         <h3>Chào mừng!</h3>
         <p>Đây là trung tâm quản lý nghiên cứu của bạn.</p>
       </div>
-
       <div className="dashboard-section">
         <div className="shortcut-grid">
           <Link to="/add-patient" className="shortcut-item">

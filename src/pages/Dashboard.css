@@ -1,3 +1,18 @@
+.dashboard-container {
+  background: linear-gradient(135deg, #f0f4ff, #d9e8ff); /* Vibrant gradient background */
+  min-height: 100vh; /* Ensure it covers the full viewport height */
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+.dashboard-section {
+  background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background for sections */
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
 .shortcut-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -13,11 +28,16 @@
   text-decoration: none;
   color: #333;
   transition: transform 0.2s ease, color 0.2s ease;
+  background: rgba(255, 255, 255, 0.9); /* Add a white background to shortcut items */
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
 }
 
 .shortcut-item:hover {
   transform: scale(1.1);
   color: #007bff;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Enhance shadow on hover */
 }
 
 .shortcut-icon {
