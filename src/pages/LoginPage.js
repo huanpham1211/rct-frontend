@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // ✅ Import this
 import './LoginPage.css';
-import { jwtDecode } from 'jwt-decode'; // Use named import
+import jwtDecode from 'jwt-decode'; // Correct import
+
 
 const token = localStorage.getItem('token');
 if (token) {
@@ -21,23 +22,27 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-const handleLogin = async (e) => {
-  e.preventDefault();
-  const res = await fetch('https://rct-backend-1erq.onrender.com/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
-  });
-
-  const data = await res.json();
-  if (data.success) {
-    setError('');
-    localStorage.setItem('token', data.token); // Save the token from the response
-    navigate('/dashboard'); // Redirect to the dashboard
-  } else {
-    setError(data.message || 'Login failed');
-  }
-};
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const res = await fetch('https://rct-backend-1erq.onrender.com/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    });
+  
+    const data = await res.json();
+    console.log('Login response:', data); // Debugging log
+  
+    if (data.success) {
+      setError('');
+      localStorage.setItem('token', data.token); // Save the token
+      localStorage.setItem('role', data.role); // ✅ save role
+      console.log('Token saved:', data.token); // Debugging log
+      navigate('/dashboard'); // Redirect to the dashboard
+    } else {
+      setError(data.message || 'Login failed');
+    }
+  };
 
   return (
     <div className="login-container">
