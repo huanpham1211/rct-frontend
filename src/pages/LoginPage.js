@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // ✅ Import this
 import './LoginPage.css';
-import jwtDecode from 'jwt-decode'; // Correct import
+import { jwtDecode } from 'jwt-decode';
 
 
 const token = localStorage.getItem('token');
