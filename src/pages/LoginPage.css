@@ -3,18 +3,21 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080') no-repeat center center/cover;
+  min-height: 100vh; /* Allow scrolling if content overflows */
+  background: url('https://source.unsplash.com/1600x900/?research,science') no-repeat center center/cover; /* Scaled background image */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 20px; /* Add padding for better spacing */
 }
 
 .login-box {
-  background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+  background-color: rgba(255, 255, 255, 0.95); /* Semi-transparent white background */
   padding: 40px;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Stronger shadow for better contrast */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
   width: 100%;
-  max-width: 400px;
+  max-width: 400px; /* Limit the width of the form */
+  text-align: center; /* Center-align text */
 }
 
 .login-box h2 {
@@ -32,6 +35,7 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 16px;
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
 }
 
 .login-box button {
@@ -63,4 +67,19 @@
   outline: none;
   border-color: #007cf0;
   box-shadow: 0 0 5px rgba(0, 124, 240, 0.5);
+}
+
+@media (max-width: 768px) {
+  .login-box {
+    padding: 20px;
+  }
+
+  .login-box h2 {
+    font-size: 20px;
+  }
+
+  .login-box input,
+  .login-box button {
+    font-size: 14px;
+  }
 }
