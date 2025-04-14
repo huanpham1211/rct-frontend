@@ -4,10 +4,7 @@ import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 
 const Dashboard = () => {
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    window.location.href = '/'; // Redirect to login
-  };
+
 
   return (
     <div className="dashboard-container">
@@ -50,9 +47,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="dashboard-section">
-        <button className="logout-button" onClick={handleLogout}>🚪 Đăng xuất</button>
-      </div>
+    
     </div>
   );
 };
