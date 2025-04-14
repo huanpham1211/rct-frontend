@@ -1,0 +1,42 @@
+.site-page-container {
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+  }
+  
+  .site-form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .site-form input {
+    padding: 8px;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  
+  .site-form button {
+    padding: 10px;
+    font-weight: bold;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .site-list {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .site-list li {
+    padding: 5px 0;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .form-message {
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  
