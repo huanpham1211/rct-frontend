@@ -21,23 +21,23 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    const res = await fetch('https://rct-backend-1erq.onrender.com/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
-    });
+const handleLogin = async (e) => {
+  e.preventDefault();
+  const res = await fetch('https://rct-backend-1erq.onrender.com/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password }),
+  });
 
-    const data = await res.json();
-    if (data.success) {
-      setError('');
-      localStorage.setItem('token', token);
-      navigate('/dashboard'); // ✅ Redirect
-    } else {
-      setError(data.message || 'Login failed');
-    }
-  };
+  const data = await res.json();
+  if (data.success) {
+    setError('');
+    localStorage.setItem('token', data.token); // Save the token from the response
+    navigate('/dashboard'); // Redirect to the dashboard
+  } else {
+    setError(data.message || 'Login failed');
+  }
+};
 
   return (
     <div className="login-container">
