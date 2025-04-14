@@ -1,25 +1,4 @@
-.header-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #f0f0f0;
-  }
-  
-  .header-actions {
-    position: relative;
-  }
-  
-  .gear-icon {
-    font-size: 20px;
-    cursor: pointer;
-  }
-  
-  .tooltip-container {
-    position: relative;
-  }
-  
-  .dropdown-menu {
+.dropdown-menu {
     position: absolute;
     top: 30px;
     right: 0;
@@ -28,7 +7,7 @@
     border-radius: 4px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 10;
-    width: 150px;
+    width: 180px; /* Adjust width for longer text */
   }
   
   .dropdown-item {
@@ -41,19 +20,5 @@
   }
   
   .dropdown-item:hover {
-    background-color: #f0f0f0;
-  }
-  
-  .logout-button {
-    border: none;
-    background: none;
-    width: 100%;
-    text-align: left;
-    padding: 10px;
-    cursor: pointer;
-    color: #333;
-  }
-  
-  .logout-button:hover {
     background-color: #f0f0f0;
   }

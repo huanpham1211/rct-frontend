@@ -10,7 +10,7 @@ const Dashboard = () => {
     <div className="dashboard-container">
       <Header />
 
-      <div className="dashboard-header">RCT Dashboard</div>
+      <div className="dashboard-header">Dashboard</div>
 
       <div className="dashboard-section">
         <h3>Chào mừng!</h3>
@@ -18,7 +18,6 @@ const Dashboard = () => {
       </div>
 
       <div className="dashboard-section">
-        <h3>Vào nhanh</h3>
         <div className="shortcut-grid">
           <Link to="/add-patient" className="shortcut-item">
             <div className="shortcut-icon">📋</div>

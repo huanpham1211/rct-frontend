@@ -12,9 +12,11 @@ const Header = () => {
     navigate('/'); // Redirect to login
   };
 
+  const userRole = localStorage.getItem('role'); // Get the user's role from localStorage
+
   return (
     <div className="header-bar">
-      <h1>RCT System</h1>
+      <h1>HỆ THỐNG QUẢN LÝ NGHIÊN CỨU</h1>
       <div className="header-actions">
         <div
           className="tooltip-container"
@@ -25,6 +27,9 @@ const Header = () => {
           {showDropdown && (
             <div className="dropdown-menu">
               <Link to="/change-password" className="dropdown-item">Đổi mật khẩu</Link>
+              {userRole === 'admin' && ( // Show Create User only for admins
+                <Link to="/create-user" className="dropdown-item">Tạo người dùng</Link>
+              )}
               <button onClick={handleLogout} className="dropdown-item logout-button">Đăng xuất</button>
             </div>
           )}
