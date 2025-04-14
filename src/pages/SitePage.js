@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom'; // Import Link for the back button
 import './SitePage.css';
 
 const SitePage = () => {
@@ -45,6 +46,7 @@ const SitePage = () => {
   return (
     <div className="site-page-container">
       <h2>Quản lý cơ sở nghiên cứu (Site)</h2>
+      <p>Hiện tại có <strong>{sites.length}</strong> cơ sở nghiên cứu.</p> {/* Display site count */}
 
       <form onSubmit={handleSubmit} className="site-form">
         <input
@@ -74,6 +76,11 @@ const SitePage = () => {
           </li>
         ))}
       </ul>
+
+      {/* Back button */}
+      <Link to="/dashboard" className="back-button">
+        ← Quay lại Dashboard
+      </Link>
     </div>
   );
 };

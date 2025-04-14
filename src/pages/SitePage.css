@@ -2,25 +2,89 @@
     padding: 30px;
     max-width: 600px;
     margin: auto;
+    background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .site-page-container h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
   }
   
   .site-form input {
     display: block;
     width: 100%;
-    padding: 8px;
+    padding: 12px;
     margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+  
+  .site-form input:focus {
+    outline: none;
+    border-color: #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
   }
   
   .site-form button {
-    padding: 10px 15px;
+    padding: 12px 20px;
     background-color: #007BFF;
     color: white;
     border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .site-form button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05); /* Slight zoom effect */
   }
   
   .site-list {
     margin-top: 20px;
     padding-left: 20px;
+    list-style-type: none;
   }
   
+  .site-list li {
+    margin-bottom: 10px;
+    padding: 10px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+  
+  .site-list li:hover {
+    background: #f1f1f1;
+  }
+  
+  .back-button {
+    display: block;
+    margin: 20px auto 0;
+    text-align: center;
+    padding: 12px 20px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .back-button:hover {
+    background-color: #5a6268;
+    transform: scale(1.05); /* Slight zoom effect */
+  }
