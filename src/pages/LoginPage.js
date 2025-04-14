@@ -2,12 +2,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // ✅ Import this
 import './LoginPage.css';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode'; // Use named import
 
 const token = localStorage.getItem('token');
 if (token) {
-    const decoded = jwt_decode(token);
-    if (decoded.exp * 1000 < Date.now()) {
+      const decoded = jwtDecode(token);
+      if (decoded.exp * 1000 < Date.now()) {
         // Token has expired
         localStorage.removeItem('token');
         // Redirect to login or show message
