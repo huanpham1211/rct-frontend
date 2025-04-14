@@ -1,42 +1,26 @@
 .site-page-container {
-    padding: 20px;
+    padding: 30px;
     max-width: 600px;
     margin: auto;
   }
   
-  .site-form {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-  }
-  
   .site-form input {
+    display: block;
+    width: 100%;
     padding: 8px;
-    margin-bottom: 10px;
-    font-size: 16px;
+    margin: 10px 0;
   }
   
   .site-form button {
-    padding: 10px;
-    font-weight: bold;
-    background-color: #007bff;
+    padding: 10px 15px;
+    background-color: #007BFF;
     color: white;
     border: none;
     cursor: pointer;
   }
   
   .site-list {
-    list-style: none;
-    padding-left: 0;
-  }
-  
-  .site-list li {
-    padding: 5px 0;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .form-message {
-    margin-top: 10px;
-    font-weight: bold;
+    margin-top: 20px;
+    padding-left: 20px;
   }
   

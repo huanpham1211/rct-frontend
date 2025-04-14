@@ -17,9 +17,13 @@ const CreateUserPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem('token');
     const res = await fetch('https://rct-backend-1erq.onrender.com/users', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
       body: JSON.stringify(formData),
     });
     const data = await res.json();
@@ -30,6 +34,7 @@ const CreateUserPage = () => {
       setMessage(`❌ ${data.message || 'Error creating user'}`);
     }
   };
+  
 
   return (
     <div className="create-user-container">
@@ -49,6 +54,7 @@ const CreateUserPage = () => {
           <option value="lab">Lab</option>
           <option value="reviewer">Reviewer</option>
           <option value="physician">Physician</option>
+          <option value="studymanager">Study Manager</option>
         </select>
 
         <button type="submit">Tạo tài khoản</button>

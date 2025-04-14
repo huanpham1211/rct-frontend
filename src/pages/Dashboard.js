@@ -1,4 +1,3 @@
-// src/pages/Dashboard.js
 import React from 'react';
 import './Dashboard.css';
 import { Link } from 'react-router-dom';
@@ -11,7 +10,6 @@ const Dashboard = () => {
   };
 
   return (
-    
     <div className="dashboard-container">
       <Header />
 
@@ -19,17 +17,37 @@ const Dashboard = () => {
 
       <div className="dashboard-section">
         <h3>Chào mừng!</h3>
-        <p>Đây là trung tâm quản lý chính của bạn để điều hành thử nghiệm lâm sàng ngẫu nhiên RCT.</p>
+        <p>Đây là trung tâm quản lý nghiên cứu của bạn.</p>
       </div>
 
       <div className="dashboard-section">
         <h3>Vào nhanh</h3>
-        <ul className="shortcut-list">
-          <li><Link to="/add-patient">📋 Nhập bệnh nhân mới</Link></li>
-          <li><Link to="/lab-result">🧪 Nhập kết quả xét nghiệm</Link></li>
-          <li><Link to="/review">📁 Review dữ liệu nghiên cứu</Link></li>
-          <li><Link to="/check-up">🩺 Khám bệnh</Link></li>
-        </ul>
+        <div className="shortcut-grid">
+          <Link to="/add-patient" className="shortcut-item">
+            <div className="shortcut-icon">📋</div>
+            <div className="shortcut-text">Nhập bệnh nhân mới</div>
+          </Link>
+          <Link to="/lab-result" className="shortcut-item">
+            <div className="shortcut-icon">🧪</div>
+            <div className="shortcut-text">Nhập kết quả xét nghiệm</div>
+          </Link>
+          <Link to="/review" className="shortcut-item">
+            <div className="shortcut-icon">📁</div>
+            <div className="shortcut-text">Review dữ liệu nghiên cứu</div>
+          </Link>
+          <Link to="/check-up" className="shortcut-item">
+            <div className="shortcut-icon">🩺</div>
+            <div className="shortcut-text">Khám bệnh</div>
+          </Link>
+          <Link to="/site" className="shortcut-item">
+            <div className="shortcut-icon">🏢</div>
+            <div className="shortcut-text">Quản lý địa điểm</div>
+          </Link>
+          <Link to="/study" className="shortcut-item">
+            <div className="shortcut-icon">📚</div>
+            <div className="shortcut-text">Quản lý nghiên cứu</div>
+          </Link>
+        </div>
       </div>
 
       <div className="dashboard-section">

@@ -10,6 +10,9 @@ import CheckUpPage from './pages/CheckUpPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import ChangePassword from './pages/ChangePassword';
 import CreateUserPage from './pages/CreateUserPage';
+import SitePage from './pages/SitePage';
+import StudyPage from './pages/StudyPage';
+
 
 function App() {
   return (
@@ -37,6 +40,14 @@ function App() {
         <Route
           path="/check-up"
           element={<ProtectedRoute allowedRoles={['admin', 'physician']} element={<CheckUpPage />} />}
+        />
+        <Route
+          path="/site"
+          element={<ProtectedRoute allowedRoles={['admin']} element={<SitePage />} />}
+        />
+        <Route
+          path="/study"
+          element={<ProtectedRoute allowedRoles={['admin', 'studymanager']} element={<StudyPage />} />}
         />
       </Routes>
     </Router>

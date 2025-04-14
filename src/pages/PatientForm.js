@@ -1,5 +1,6 @@
 // src/pages/PatientForm.js
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom'; 
 import './PatientForm.css';
 
 const token = localStorage.getItem('token');
@@ -65,6 +66,10 @@ const PatientForm = () => {
 
   return (
     <div className="patient-form-container">
+      {/* Back button */}
+      <Link to="/dashboard" className="back-button">
+        ← Quay lại
+      </Link>
       <form onSubmit={handleSubmit} className="patient-form">
         <h2>Thêm bệnh nhân mới</h2>
 
