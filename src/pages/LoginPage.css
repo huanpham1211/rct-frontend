@@ -1,15 +1,4 @@
 /* src/LoginPage.css */
-.login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh; /* Allow scrolling if content overflows */
-  background: url('/images/background.jpg') no-repeat center center/cover; /* Correct path to the image */
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  overflow-y: auto; /* Enable vertical scrolling */
-  padding: 20px; /* Add padding for better spacing */
-}
-
 .login-box {
   background-color: rgba(255, 255, 255, 0.95); /* Semi-transparent white background */
   padding: 40px;

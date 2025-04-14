@@ -45,7 +45,21 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="login-container">
+    <div 
+    className="login-container"
+    style={{
+      backgroundImage: "url('/images/background.jpg')", // Set the background image
+      backgroundSize: 'cover', // Ensure the image covers the entire container
+      backgroundPosition: 'center', // Center the image
+      backgroundRepeat: 'no-repeat', // Prevent the image from repeating
+      height: '90vh', // Use full viewport height
+      display: 'flex', // Center the login box
+      justifyContent: 'center',
+      alignItems: 'center',
+      margin: '0', // Remove any default margins
+      padding: '0', // Remove padding to avoid scrollbars
+      overflow: 'hidden', // Prevent scrolling
+    }}>
       <form onSubmit={handleLogin} className="login-box">
         <h2>Hệ thống quản lý nghiên cứu</h2>
         <input
