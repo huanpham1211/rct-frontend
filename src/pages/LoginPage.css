@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh; /* Allow scrolling if content overflows */
-  background: url('/images/background.jpg') no-repeat center center/cover; /* Use your static image */
+  background: url('/images/background.jpg') no-repeat center center/cover; /* Correct path to the image */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   overflow-y: auto; /* Enable vertical scrolling */
   padding: 20px; /* Add padding for better spacing */
