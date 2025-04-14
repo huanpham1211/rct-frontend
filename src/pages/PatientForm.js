@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import './PatientForm.css';
 
+const token = localStorage.getItem('token');
+
 const PatientForm = () => {
   const [formData, setFormData] = useState({
     name: '',

@@ -8,6 +8,8 @@ import LabForm from './pages/LabForm';
 import ReviewPanel from './pages/ReviewPanel';
 import CheckUpPage from './pages/CheckUpPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import ChangePassword from './pages/ChangePassword';
+import CreateUserPage from './pages/CreateUserPage';
 
 function App() {
   return (
@@ -15,9 +17,15 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
-
-        <Route path="/add-patient" element={<PatientForm />} />
-
+        <Route path="/change-password" element={<ProtectedRoute allowedRoles={['admin', 'lab', 'recruiter', 'reviewer', 'physician', 'studymanager']} element={<ChangePassword />} />} />
+        <Route  
+          path="/create-user"  
+          element={<ProtectedRoute allowedRoles={['admin']} element={<CreateUserPage />} />}
+        />
+        <Route
+          path="/add-patient"
+          element={<ProtectedRoute allowedRoles={['admin', 'recruiter']} element={<PatientForm />} />}
+        />
         <Route
           path="/lab-result"
           element={<ProtectedRoute allowedRoles={['admin', 'lab']} element={<LabForm />} />}

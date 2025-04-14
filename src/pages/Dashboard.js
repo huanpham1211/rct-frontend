@@ -2,6 +2,7 @@
 import React from 'react';
 import './Dashboard.css';
 import { Link } from 'react-router-dom';
+import Header from '../components/Header';
 
 const Dashboard = () => {
   const handleLogout = () => {
@@ -10,7 +11,10 @@ const Dashboard = () => {
   };
 
   return (
+    
     <div className="dashboard-container">
+      <Header />
+
       <div className="dashboard-header">RCT Dashboard</div>
 
       <div className="dashboard-section">

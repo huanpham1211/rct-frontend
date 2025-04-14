@@ -2,6 +2,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // ✅ Import this
 import './LoginPage.css';
+import jwt_decode from 'jwt-decode';
+
+const token = localStorage.getItem('token');
+if (token) {
+    const decoded = jwt_decode(token);
+    if (decoded.exp * 1000 < Date.now()) {
+        // Token has expired
+        localStorage.removeItem('token');
+        // Redirect to login or show message
+    }
+}
+
 
 const LoginPage = () => {
   const navigate = useNavigate(); // ✅ Navigation hook
@@ -20,7 +32,7 @@ const LoginPage = () => {
     const data = await res.json();
     if (data.success) {
       setError('');
-      localStorage.setItem('role', data.role); // Store role (optional)
+      localStorage.setItem('token', token);
       navigate('/dashboard'); // ✅ Redirect
     } else {
       setError(data.message || 'Login failed');
