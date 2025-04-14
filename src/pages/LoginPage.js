@@ -47,7 +47,7 @@ const LoginPage = () => {
   return (
     <div className="login-container">
       <form onSubmit={handleLogin} className="login-box">
-        <h2>Hệ thống quản lý RCT</h2>
+        <h2>Hệ thống quản lý nghiên cứu</h2>
         <input
           type="text"
           placeholder="Tên đăng nhập"
