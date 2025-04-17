@@ -17,7 +17,8 @@ const SitePage = () => {
       return;
     }
     fetchSites();
-  }, []);
+  }, [token, role]);
+
 
   const fetchSites = async () => {
     try {
