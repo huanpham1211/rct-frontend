@@ -36,8 +36,17 @@ const ChangePassword = () => {
       body: JSON.stringify({ oldPassword, newPassword }),
     });
 
-    const result = await res.json();
+    let result;
+    try {
+      result = await res.json();
+    } catch (err) {
+      console.error('❌ Failed to parse JSON:', err);
+      setMessage('❌ Lỗi máy chủ. Vui lòng thử lại sau.');
+      return;
+    }
+    
     setMessage(result.message || (res.ok ? 'Đổi mật khẩu thành công!' : 'Có lỗi xảy ra.'));
+
   };
 
   return (
