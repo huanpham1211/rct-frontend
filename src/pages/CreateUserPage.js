@@ -153,17 +153,47 @@ const CreateUserPage = () => {
       </div>
 
       <div className="user-management-section">
-        <h4>🧩 Gán vai trò</h4>
-        {['admin', 'recruiter', 'lab', 'reviewer', 'physician', 'studymanager'].map((role) => (
-          <label key={role} style={{ display: 'block' }}>
-            <input
-              type="checkbox"
-              checked={newRoles.includes(role)}
-              onChange={() => handleRoleChange(role)}
-            /> {role}
-          </label>
-        ))}
-        <button onClick={handleAssignRoles}>Cập nhật vai trò</button>
+        <h4>🧩 Thay đổi vai trò</h4>
+        <select
+          value={formData.newSingleRole || ''}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, newSingleRole: e.target.value }))
+          }
+        >
+          <option value="">-- Chọn vai trò mới --</option>
+          <option value="admin">Admin</option>
+          <option value="recruiter">Recruiter</option>
+          <option value="lab">Lab</option>
+          <option value="reviewer">Reviewer</option>
+          <option value="physician">Physician</option>
+          <option value="studymanager">Study Manager</option>
+        </select>
+        <button
+          onClick={async () => {
+            const res = await fetch(
+              `https://rct-backend-1erq.onrender.com/users/${selectedUser}/update-role`,
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ role: formData.newSingleRole }),
+              }
+            );
+            const data = await res.json();
+            if (res.ok) {
+              alert('✅ Vai trò đã được cập nhật');
+              setFormData((prev) => ({ ...prev, newSingleRole: '' }));
+              fetchUsers();
+            } else {
+              alert(`❌ ${data.message || 'Lỗi cập nhật vai trò'}`);
+            }
+          }}
+          disabled={!selectedUser || !formData.newSingleRole}
+        >
+          Cập nhật vai trò
+        </button>
       </div>
     </div>
   );
