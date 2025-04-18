@@ -28,7 +28,7 @@ const Header = () => {
             <div className="dropdown-menu">
               <Link to="/change-password" className="dropdown-item">Đổi mật khẩu</Link>
               {userRole === 'admin' && ( // Show Create User only for admins
-                <Link to="/create-user" className="dropdown-item">Tạo người dùng</Link>
+                <Link to="/create-user" className="dropdown-item">Quản lý người dùng</Link>
               )}
               <button onClick={handleLogout} className="dropdown-item logout-button">Đăng xuất</button>
             </div>
