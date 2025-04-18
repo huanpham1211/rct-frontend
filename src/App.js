@@ -19,7 +19,12 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute element={<Dashboard />} allowedRoles={['admin', 'lab', 'recruiter', 'reviewer', 'physician', 'studymanager']} />
+          }
+        />
         <Route path="/change-password" element={<ProtectedRoute allowedRoles={['admin', 'lab', 'recruiter', 'reviewer', 'physician', 'studymanager']} element={<ChangePassword />} />} />
         <Route  
           path="/create-user"  
