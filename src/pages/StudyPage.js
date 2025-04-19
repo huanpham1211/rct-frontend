@@ -29,8 +29,8 @@ const StudyPage = () => {
         headers: { Authorization: `Bearer ${token}` },
         params: { search: searchQuery, page: currentPage, limit: pageSize }
       });
-      setStudies(res.data);
-    } catch {
+      setStudies(res.data.studies || []);
+    } catch (err) {
       toast.error("❌ Lỗi khi tải nghiên cứu");
     }
   };
