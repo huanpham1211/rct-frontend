@@ -3,12 +3,11 @@ import './CreateUserPage.css';
 import { useNavigate } from 'react-router-dom';
 
 const CreateUserPage = () => {
-  const [formData, setFormData] = useState({ username: '', password: '', role: '' });
+  const [formData, setFormData] = useState({ username: '', password: '', role: '', newSingleRole: '' });
   const [message, setMessage] = useState('');
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const [newRoles, setNewRoles] = useState([]);
   const navigate = useNavigate();
 
   const token = localStorage.getItem('token');
@@ -18,7 +17,7 @@ const CreateUserPage = () => {
   }, []);
 
   const fetchUsers = async () => {
-    const res = await fetch('https://rct-backend-1erq.onrender.com/users', {
+    const res = await fetch('https://rct-backend-1erq.onrender.com/api/users', {
       headers: { Authorization: `Bearer ${token}` }
     });
     const data = await res.json();
@@ -32,18 +31,18 @@ const CreateUserPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch('https://rct-backend-1erq.onrender.com/users', {
+    const res = await fetch('https://rct-backend-1erq.onrender.com/api/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify({ username: formData.username, password: formData.password, role: formData.role })
     });
     const data = await res.json();
     if (res.ok) {
       setMessage('✅ Tạo tài khoản thành công');
-      setFormData({ username: '', password: '', role: '' });
+      setFormData({ username: '', password: '', role: '', newSingleRole: '' });
       fetchUsers();
     } else {
       setMessage(`❌ ${data.message || 'Lỗi tạo tài khoản'}`);
@@ -51,7 +50,7 @@ const CreateUserPage = () => {
   };
 
   const handleResetPassword = async () => {
-    const res = await fetch(`https://rct-backend-1erq.onrender.com/users/${selectedUser}/reset-password`, {
+    const res = await fetch(`https://rct-backend-1erq.onrender.com/api/users/${selectedUser}/reset-password`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -68,29 +67,23 @@ const CreateUserPage = () => {
     }
   };
 
-  const handleAssignRoles = async () => {
-    const res = await fetch(`https://rct-backend-1erq.onrender.com/users/${selectedUser}/assign-roles`, {
+  const handleUpdateRole = async () => {
+    const res = await fetch(`https://rct-backend-1erq.onrender.com/api/users/${selectedUser}/update-role`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ roles: newRoles })
+      body: JSON.stringify({ role: formData.newSingleRole }),
     });
     const data = await res.json();
     if (res.ok) {
       alert('✅ Vai trò đã được cập nhật');
+      setFormData((prev) => ({ ...prev, newSingleRole: '' }));
       fetchUsers();
-      setNewRoles([]);
     } else {
       alert(`❌ ${data.message || 'Lỗi cập nhật vai trò'}`);
     }
-  };
-
-  const handleRoleChange = (role) => {
-    setNewRoles((prev) =>
-      prev.includes(role) ? prev.filter((r) => r !== role) : [...prev, role]
-    );
   };
 
   return (
@@ -126,7 +119,7 @@ const CreateUserPage = () => {
       <ul className="user-list">
         {users.map((u) => (
           <li key={u.id}>
-            <strong>{u.username}</strong> - Vai trò: {u.roles?.join(', ')}
+            <strong>{u.username}</strong> - Vai trò: {u.role}
           </li>
         ))}
       </ul>
@@ -169,27 +162,7 @@ const CreateUserPage = () => {
           <option value="studymanager">Study Manager</option>
         </select>
         <button
-          onClick={async () => {
-            const res = await fetch(
-              `https://rct-backend-1erq.onrender.com/users/${selectedUser}/update-role`,
-              {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({ role: formData.newSingleRole }),
-              }
-            );
-            const data = await res.json();
-            if (res.ok) {
-              alert('✅ Vai trò đã được cập nhật');
-              setFormData((prev) => ({ ...prev, newSingleRole: '' }));
-              fetchUsers();
-            } else {
-              alert(`❌ ${data.message || 'Lỗi cập nhật vai trò'}`);
-            }
-          }}
+          onClick={handleUpdateRole}
           disabled={!selectedUser || !formData.newSingleRole}
         >
           Cập nhật vai trò
