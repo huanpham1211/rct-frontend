@@ -51,7 +51,7 @@ const StudyPage = () => {
   const handleAssignSite = async (studyId, siteId) => {
     try {
       await axios.post(
-        "https://rct-backend-1erq.onrender.com/api/study-site",
+        "https://rct-backend-1erq.onrender.com/api/studies/assign",
         { study_id: studyId, site_id: siteId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
