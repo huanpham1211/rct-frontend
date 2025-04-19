@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
+import "./StudyFormModal.css";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
-const StudyFormModal = ({ onClose, onStudyCreated }) => {
-  const token = localStorage.getItem("token");
+const StudyFormModal = ({ onClose, onSuccess, study = null }) => {
   const [formData, setFormData] = useState({
     name: "",
     protocol_number: "",
@@ -12,75 +13,76 @@ const StudyFormModal = ({ onClose, onStudyCreated }) => {
     end_date: "",
   });
 
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (study) {
+      setFormData({
+        name: study.name || "",
+        protocol_number: study.protocol_number || "",
+        irb_number: study.irb_number || "",
+        start_date: study.start_date || "",
+        end_date: study.end_date || "",
+      });
+    }
+  }, [study]);
+
   const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const endpoint = study
+      ? `https://rct-backend-1erq.onrender.com/api/studies/${study.id}`
+      : "https://rct-backend-1erq.onrender.com/api/studies";
+
+    const method = study ? "put" : "post";
+
     try {
-      await axios.post("https://rct-backend-1erq.onrender.com/api/studies", formData, {
-        headers: { Authorization: `Bearer ${token}` },
+      const res = await axios[method](endpoint, formData, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
-      toast.success("✅ Tạo nghiên cứu thành công");
-      onStudyCreated();
-      onClose();
+
+      toast.success(study ? "✅ Đã cập nhật nghiên cứu" : "✅ Đã tạo nghiên cứu mới");
+      onSuccess(); // trigger reload
+      onClose();   // close modal
     } catch (err) {
-      toast.error("❌ Lỗi khi tạo nghiên cứu");
+      console.error("Study submit failed:", err);
+      toast.error("❌ Lỗi khi lưu nghiên cứu");
     }
   };
 
   return (
     <div className="modal">
       <div className="modal-content">
-        <h3 className="text-lg font-semibold mb-2">Tạo nghiên cứu mới</h3>
-        <form onSubmit={handleSubmit} className="flex flex-col space-y-2">
-          <input
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Tên nghiên cứu"
-            required
-            className="border p-2"
-          />
-          <input
-            name="protocol_number"
-            value={formData.protocol_number}
-            onChange={handleChange}
-            placeholder="Protocol Number"
-            className="border p-2"
-          />
-          <input
-            name="irb_number"
-            value={formData.irb_number}
-            onChange={handleChange}
-            placeholder="IRB Number"
-            className="border p-2"
-          />
-          <input
-            type="date"
-            name="start_date"
-            value={formData.start_date}
-            onChange={handleChange}
-            placeholder="Ngày bắt đầu"
-            className="border p-2"
-          />
-          <input
-            type="date"
-            name="end_date"
-            value={formData.end_date}
-            onChange={handleChange}
-            placeholder="Ngày kết thúc"
-            className="border p-2"
-          />
-          <div className="flex justify-end space-x-2">
-            <button type="button" onClick={onClose} className="bg-gray-300 px-4 py-2 rounded">
-              Huỷ
-            </button>
-            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
-              Tạo
-            </button>
-          </div>
+        <h3>{study ? "Chỉnh sửa nghiên cứu" : "Thêm nghiên cứu mới"}</h3>
+        <form onSubmit={handleSubmit}>
+          <label>Tên nghiên cứu</label>
+          <input name="name" value={formData.name} onChange={handleChange} required />
+
+          <label>Mã protocol</label>
+          <input name="protocol_number" value={formData.protocol_number} onChange={handleChange} />
+
+          <label>Số IRB</label>
+          <input name="irb_number" value={formData.irb_number} onChange={handleChange} />
+
+          <label>Ngày bắt đầu</label>
+          <input type="date" name="start_date" value={formData.start_date} onChange={handleChange} />
+
+          <label>Ngày kết thúc</label>
+          <input type="date" name="end_date" value={formData.end_date} onChange={handleChange} />
+
+          <button type="submit">
+            {study ? "Cập nhật" : "Tạo"}
+          </button>
+          <button type="button" className="cancel-btn" onClick={onClose}>
+            Hủy
+          </button>
         </form>
       </div>
     </div>
