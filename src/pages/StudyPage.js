@@ -17,12 +17,14 @@ const StudyPage = () => {
   const [pageSize] = useState(5);
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
-
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  
   useEffect(() => {
     fetchStudies();
     fetchSites();
   }, [currentPage, searchQuery]);
-
+  
   const fetchStudies = async () => {
     try {
       const res = await axios.get("https://rct-backend-1erq.onrender.com/api/studies", {
@@ -30,6 +32,8 @@ const StudyPage = () => {
         params: { search: searchQuery, page: currentPage, limit: pageSize }
       });
       setStudies(res.data.studies || []);
+      setTotalPages(res.data.pages || 1);
+      setTotalItems(res.data.total || 0);
     } catch (err) {
       toast.error("❌ Lỗi khi tải nghiên cứu");
     }
@@ -142,11 +146,16 @@ const StudyPage = () => {
         </tbody>
       </table>
 
-      <div className="pagination mt-4 flex justify-center space-x-2">
-        <button onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}>&lt;</button>
-        <span>Trang {currentPage}</span>
-        <button onClick={() => setCurrentPage((p) => p + 1)}>&gt;</button>
-      </div>
+    <div className="pagination mt-4 flex justify-center space-x-2">
+      <button onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))} disabled={currentPage === 1}>
+        &lt;
+      </button>
+      <span>Trang {currentPage} / {totalPages}</span>
+      <button onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))} disabled={currentPage === totalPages}>
+        &gt;
+      </button>
+    </div>
+
 
       {showStudyModal && (
         <StudyFormModal
