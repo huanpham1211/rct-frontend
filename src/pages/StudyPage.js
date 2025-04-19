@@ -10,11 +10,13 @@ const StudyPage = () => {
   const [sites, setSites] = useState([]);
   const [selectedStudyId, setSelectedStudyId] = useState(null);
   const [showAssignModal, setShowAssignModal] = useState(false);
-  const [showFormModal, setShowFormModal] = useState(false);
+  const [showStudyModal, setShowStudyModal] = useState(false);
+  const [editStudy, setEditStudy] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(5);
   const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
 
   useEffect(() => {
     fetchStudies();
@@ -25,14 +27,10 @@ const StudyPage = () => {
     try {
       const res = await axios.get("https://rct-backend-1erq.onrender.com/api/studies", {
         headers: { Authorization: `Bearer ${token}` },
-        params: {
-          search: searchQuery,
-          page: currentPage,
-          limit: pageSize
-        }
+        params: { search: searchQuery, page: currentPage, limit: pageSize }
       });
       setStudies(res.data);
-    } catch (err) {
+    } catch {
       toast.error("❌ Lỗi khi tải nghiên cứu");
     }
   };
@@ -43,8 +41,8 @@ const StudyPage = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSites(res.data);
-    } catch (err) {
-      toast.error("❌ Lỗi khi tải cơ sở nghiên cứu");
+    } catch {
+      toast.error("❌ Lỗi khi tải danh sách cơ sở");
     }
   };
 
@@ -58,9 +56,14 @@ const StudyPage = () => {
       toast.success("✅ Gán cơ sở thành công");
       setShowAssignModal(false);
       fetchStudies();
-    } catch (err) {
+    } catch {
       toast.error("❌ Không thể gán cơ sở");
     }
+  };
+
+  const handleEdit = (study) => {
+    setEditStudy(study);
+    setShowStudyModal(true);
   };
 
   return (
@@ -68,16 +71,27 @@ const StudyPage = () => {
       <ToastContainer />
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">Quản lý nghiên cứu</h2>
-        <button onClick={() => setShowFormModal(true)} className="bg-blue-600 text-white px-4 py-2 rounded">
-          ➕ Tạo nghiên cứu
-        </button>
+        {["admin", "studymanager"].includes(role) && (
+          <button
+            onClick={() => {
+              setEditStudy(null);
+              setShowStudyModal(true);
+            }}
+            className="bg-blue-600 text-white px-4 py-2 rounded"
+          >
+            ➕ Tạo nghiên cứu
+          </button>
+        )}
       </div>
 
       <input
         type="text"
         placeholder="🔍 Tìm kiếm nghiên cứu..."
         value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
+        onChange={(e) => {
+          setSearchQuery(e.target.value);
+          setCurrentPage(1);
+        }}
         className="border p-2 mb-4 w-full"
       />
 
@@ -90,7 +104,7 @@ const StudyPage = () => {
             <th className="border p-2">IRB</th>
             <th className="border p-2">Bắt đầu</th>
             <th className="border p-2">Kết thúc</th>
-            <th className="border p-2">Gán cơ sở</th>
+            <th className="border p-2">Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -102,16 +116,26 @@ const StudyPage = () => {
               <td className="border p-2">{s.irb_number}</td>
               <td className="border p-2">{s.start_date}</td>
               <td className="border p-2">{s.end_date}</td>
-              <td className="border p-2">
-                <button
-                  className="bg-green-500 text-white px-3 py-1 rounded"
-                  onClick={() => {
-                    setSelectedStudyId(s.id);
-                    setShowAssignModal(true);
-                  }}
-                >
-                  Chọn cơ sở
-                </button>
+              <td className="border p-2 space-x-2">
+                {["admin", "studymanager"].includes(role) && (
+                  <>
+                    <button
+                      className="bg-yellow-400 text-white px-2 py-1 rounded"
+                      onClick={() => handleEdit(s)}
+                    >
+                      ✏️
+                    </button>
+                    <button
+                      className="bg-green-500 text-white px-2 py-1 rounded"
+                      onClick={() => {
+                        setSelectedStudyId(s.id);
+                        setShowAssignModal(true);
+                      }}
+                    >
+                      Gán cơ sở
+                    </button>
+                  </>
+                )}
               </td>
             </tr>
           ))}
@@ -124,10 +148,11 @@ const StudyPage = () => {
         <button onClick={() => setCurrentPage((p) => p + 1)}>&gt;</button>
       </div>
 
-      {showFormModal && (
+      {showStudyModal && (
         <StudyFormModal
-          onClose={() => setShowFormModal(false)}
-          onStudyCreated={fetchStudies}
+          onClose={() => setShowStudyModal(false)}
+          onSuccess={fetchStudies}
+          study={editStudy}
         />
       )}
 
@@ -147,7 +172,10 @@ const StudyPage = () => {
                 </li>
               ))}
             </ul>
-            <button onClick={() => setShowAssignModal(false)} className="bg-red-500 text-white px-4 py-2 mt-2">
+            <button
+              onClick={() => setShowAssignModal(false)}
+              className="bg-red-500 text-white px-4 py-2 mt-2"
+            >
               Đóng
             </button>
           </div>
