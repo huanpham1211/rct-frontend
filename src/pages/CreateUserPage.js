@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './CreateUserPage.css';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CreateUserPage = () => {
   const [formData, setFormData] = useState({ username: '', password: '', role: '', newSingleRole: '' });
@@ -41,11 +43,11 @@ const CreateUserPage = () => {
     });
     const data = await res.json();
     if (res.ok) {
-      setMessage('✅ Tạo tài khoản thành công');
+      toast.success('✅ Tạo tài khoản thành công');
       setFormData({ username: '', password: '', role: '', newSingleRole: '' });
       fetchUsers();
     } else {
-      setMessage(`❌ ${data.message || 'Lỗi tạo tài khoản'}`);
+      toast.error(`❌ ${data.message || 'Lỗi tạo tài khoản'}`);
     }
   };
 
@@ -60,10 +62,10 @@ const CreateUserPage = () => {
     });
     const data = await res.json();
     if (res.ok) {
-      alert('✅ Mật khẩu đã được đặt lại');
+      toast.success('✅ Mật khẩu đã được đặt lại');
       setNewPassword('');
     } else {
-      alert(`❌ ${data.message || 'Lỗi đặt lại mật khẩu'}`);
+      toast.error(`❌ ${data.message || 'Lỗi đặt lại mật khẩu'}`);
     }
   };
 
@@ -78,16 +80,18 @@ const CreateUserPage = () => {
     });
     const data = await res.json();
     if (res.ok) {
-      alert('✅ Vai trò đã được cập nhật');
+      toast.success('✅ Vai trò đã được cập nhật');
       setFormData((prev) => ({ ...prev, newSingleRole: '' }));
       fetchUsers();
     } else {
-      alert(`❌ ${data.message || 'Lỗi cập nhật vai trò'}`);
+      toast.error(`❌ ${data.message || 'Lỗi cập nhật vai trò'}`);
     }
   };
 
   return (
     <div className="create-user-container">
+      <ToastContainer position="top-right" autoClose={3000} />
+
       <button onClick={() => navigate('/dashboard')} className="back-button">← Quay về Dashboard</button>
       <h2>➕ Tạo tài khoản người dùng mới</h2>
 
