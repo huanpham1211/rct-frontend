@@ -111,39 +111,39 @@ const StudyPage = () => {
             <th className="border p-2">Hành động</th>
           </tr>
         </thead>
-        <tbody>
-          {studies.map((s) => (
-            <tr key={s.id}>
-              <td className="border p-2">{s.id}</td>
-              <td className="border p-2">{s.name}</td>
-              <td className="border p-2">{s.protocol_number}</td>
-              <td className="border p-2">{s.irb_number}</td>
-              <td className="border p-2">{s.start_date}</td>
-              <td className="border p-2">{s.end_date}</td>
-              <td className="border p-2 space-x-2">
-                {["admin", "studymanager"].includes(role) && (
-                  <>
-                    <button
-                      className="bg-yellow-400 text-white px-2 py-1 rounded"
-                      onClick={() => handleEdit(s)}
-                    >
-                      ✏️
-                    </button>
-                    <button
-                      className="bg-green-500 text-white px-2 py-1 rounded"
-                      onClick={() => {
-                        setSelectedStudyId(s.id);
-                        setShowAssignModal(true);
-                      }}
-                    >
-                      Gán cơ sở
-                    </button>
-                  </>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
+       <tbody>
+        {studies.map((s) => (
+          <tr key={s.id}>
+            <td className="border p-2">{s.id}</td>
+            <td className="border p-2">{s.name}</td>
+            <td className="border p-2">{s.protocol_number}</td>
+            <td className="border p-2">{s.irb_number}</td>
+            <td className="border p-2">{s.start_date}</td>
+            <td className="border p-2">{s.end_date || '—'}</td>
+            <td className="border p-2">
+              {s.sites && s.sites.length > 0 ? (
+                <ul>
+                  {s.sites.map((site) => (
+                    <li key={site.id}>🏥 {site.name}</li>
+                  ))}
+                </ul>
+              ) : (
+                <span>Chưa có cơ sở</span>
+              )}
+              <button
+                className="bg-green-500 text-white px-3 py-1 mt-1 rounded"
+                onClick={() => {
+                  setSelectedStudyId(s.id);
+                  setShowAssignModal(true);
+                }}
+              >
+                ➕ Gán cơ sở
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+
       </table>
 
     <div className="pagination mt-4 flex justify-center space-x-2">
@@ -170,26 +170,32 @@ const StudyPage = () => {
           <div className="modal-content">
             <h3>Chọn cơ sở cho nghiên cứu {selectedStudyId}</h3>
             <ul>
-              {sites.map((site) => (
-                <li key={site.id}>
-                  <button
-                    onClick={() => handleAssignSite(selectedStudyId, site.id)}
-                    className="bg-blue-500 text-white px-4 py-2 m-1"
-                  >
-                    {site.name}
-                  </button>
-                </li>
-              ))}
+              {sites
+                .filter(site => {
+                  const study = studies.find(s => s.id === selectedStudyId);
+                  return !study?.sites?.some(assigned => assigned.id === site.id);
+                })
+                .map((site) => (
+                  <li key={site.id}>
+                    <button
+                      onClick={() => handleAssignSite(selectedStudyId, site.id)}
+                      className="bg-blue-500 text-white px-4 py-2 m-1"
+                    >
+                      {site.name}
+                    </button>
+                  </li>
+                ))}
             </ul>
             <button
               onClick={() => setShowAssignModal(false)}
               className="bg-red-500 text-white px-4 py-2 mt-2"
             >
               Đóng
-            </button>
-          </div>
-        </div>
-      )}
+      </button>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
