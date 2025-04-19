@@ -57,9 +57,33 @@ const StudyPage = () => {
     }
   };
 
+  const handleCreateStudy = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post(
+        "https://rct-backend-1erq.onrender.com/api/studies",
+        formData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setFormData({ name: "", protocol_number: "", irb_number: "", start_date: "", end_date: "" });
+      fetchStudies();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">Study Management</h2>
+
+      <form onSubmit={handleCreateStudy} className="mb-6 grid grid-cols-2 gap-4">
+        <input type="text" placeholder="Study Name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required />
+        <input type="text" placeholder="Protocol Number" value={formData.protocol_number} onChange={(e) => setFormData({ ...formData, protocol_number: e.target.value })} />
+        <input type="text" placeholder="IRB Number" value={formData.irb_number} onChange={(e) => setFormData({ ...formData, irb_number: e.target.value })} />
+        <input type="date" placeholder="Start Date" value={formData.start_date} onChange={(e) => setFormData({ ...formData, start_date: e.target.value })} />
+        <input type="date" placeholder="End Date" value={formData.end_date} onChange={(e) => setFormData({ ...formData, end_date: e.target.value })} />
+        <button type="submit" className="bg-blue-600 text-white px-4 py-2 col-span-2">Add New Study</button>
+      </form>
 
       <table className="w-full border-collapse">
         <thead>
@@ -86,8 +110,8 @@ const StudyPage = () => {
                 <button
                   className="bg-blue-500 text-white px-4 py-2"
                   onClick={() => {
-                    setSelectedSite(s.id); // store current study id
-                    setShowAssignModal(true); // show modal to select site
+                    setSelectedSite(s.id);
+                    setShowAssignModal(true);
                   }}
                 >
                   Assign Site
