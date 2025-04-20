@@ -160,15 +160,14 @@ const StudyPage = () => {
               >
                 ➕ Gán cơ sở
               </button>
-            </td>    
-                {["admin", "studymanager"].includes(role) && (
-                  <button
-                    className="bg-yellow-500 text-white px-3 py-1 rounded"
-                    onClick={() => handleEdit(s)}
-                  >
-                    ✏️ Sửa
-                  </button>
-                )}
+            {["admin", "studymanager"].includes(role) && (
+              <button
+                className="bg-yellow-500 text-white px-3 py-1 rounded"
+                onClick={() => handleEdit(s)}
+              >
+                ✏️ Sửa
+              </button>
+            )}
               </div>
             </td>
           </tr>
