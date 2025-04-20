@@ -4,6 +4,7 @@ import StudyFormModal from "./StudyFormModal";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './StudyPage.css';
+import { useNavigate } from "react-router-dom";
 
 const StudyPage = () => {
   const [studies, setStudies] = useState([]);
@@ -25,6 +26,8 @@ const StudyPage = () => {
     fetchSites();
   }, [currentPage, searchQuery]);
   
+const navigate = useNavigate();
+
   const fetchStudies = async () => {
     try {
       const res = await axios.get("https://rct-backend-1erq.onrender.com/api/studies", {
@@ -87,6 +90,12 @@ const StudyPage = () => {
     <div className="p-4">
       <ToastContainer />
       <div className="flex justify-between items-center mb-4">
+          <button
+        onClick={() => navigate("/dashboard")}
+        className="mb-4 bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400 transition"
+      >
+        ← Quay về Dashboard
+      </button>
         <h2 className="text-xl font-bold">Quản lý nghiên cứu</h2>
         {["admin", "studymanager"].includes(role) && (
           <button
