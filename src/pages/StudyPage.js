@@ -167,8 +167,6 @@ const StudyPage = () => {
         &gt;
       </button>
     </div>
-
-
       {showStudyModal && (
         <StudyFormModal
           onClose={() => setShowStudyModal(false)}
@@ -176,15 +174,22 @@ const StudyPage = () => {
           study={editStudy}
         />
       )}
-
       {showAssignModal && (
         <div className="modal">
           <div className="modal-content">
             <h3>Chọn cơ sở cho nghiên cứu {selectedStudyId}</h3>
+      
             <ul>
-              {sites
-                .filter(site => !assignedSiteIds.has(site.id))
-                .map((site) => (
+              {(() => {
+                const study = studies.find(s => s.id === selectedStudyId);
+                const assignedSiteIds = new Set(study?.sites?.map(s => s.id));
+                const unassignedSites = sites.filter(site => !assignedSiteIds.has(site.id));
+      
+                if (unassignedSites.length === 0) {
+                  return <li>🎉 Tất cả cơ sở đã được gán</li>;
+                }
+      
+                return unassignedSites.map(site => (
                   <li key={site.id}>
                     <button
                       onClick={() => handleAssignSite(selectedStudyId, site.id)}
@@ -193,18 +198,19 @@ const StudyPage = () => {
                       {site.name}
                     </button>
                   </li>
-                ))}
+                ));
+              })()}
             </ul>
+      
             <button
               onClick={() => setShowAssignModal(false)}
               className="bg-red-500 text-white px-4 py-2 mt-2"
             >
               Đóng
-      </button>
-    </div>
-  </div>
-)}
-
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
