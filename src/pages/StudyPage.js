@@ -22,6 +22,7 @@ const StudyPage = () => {
   const [pageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
+  const [selectedStudyForUserAssign, setSelectedStudyForUserAssign] = useState(null);
 
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
@@ -99,35 +100,37 @@ const StudyPage = () => {
     }
   };
 
-  const handleAssignUser = async (studyId, userId) => {
-    try {
-      await axios.post(
-        "https://rct-backend-1erq.onrender.com/api/studies/assign_user",
-        { study_id: studyId, user_id: userId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      toast.success("✅ Gán người dùng thành công");
-      setShowAssignUserModal(false);
-      fetchStudies();
-    } catch {
-      toast.error("❌ Không thể gán người dùng");
-    }
-  };
+const handleAssignUser = async (studyId, userId) => {
+  try {
+    await axios.post(
+      "https://rct-backend-1erq.onrender.com/api/studies/assign-user",
+      { study_id: studyId, user_id: userId },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    toast.success("✅ Gán người dùng thành công");
+    setShowAssignUserModal(false);
+    fetchStudies();
+  } catch {
+    toast.error("❌ Không thể gán người dùng");
+  }
+};
 
-  const handleUnassignUser = async (studyId, userId) => {
-    if (!window.confirm("Bạn có chắc chắn muốn bỏ gán người dùng này?")) return;
-    try {
-      await axios.post(
-        "https://rct-backend-1erq.onrender.com/api/studies/unassign_user",
-        { study_id: studyId, user_id: userId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      toast.success("✅ Đã bỏ gán người dùng");
-      fetchStudies();
-    } catch {
-      toast.error("❌ Không thể bỏ gán người dùng");
-    }
-  };
+const handleUnassignUser = async (studyId, userId) => {
+  if (!window.confirm("Bạn chắc chắn muốn bỏ gán người dùng này?")) return;
+
+  try {
+    await axios.post(
+      "https://rct-backend-1erq.onrender.com/api/studies/unassign-user",
+      { study_id: studyId, user_id: userId },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    toast.success("✅ Đã bỏ gán người dùng");
+    fetchStudies();
+  } catch {
+    toast.error("❌ Không thể bỏ gán người dùng");
+  }
+};
+
 
   const handleEdit = (study) => {
     setEditStudy(study);
@@ -199,26 +202,27 @@ const StudyPage = () => {
                 >➕ Gán cơ sở</button>
               </div>
 
-              <div className="user-list mt-4">
-                <h4>👤 Người dùng:</h4>
-                {(s.users || []).length > 0 ? (
-                  s.users.map(u => (
-                    <div key={u.id} className="user-tag">
-                      {u.username || u.name}
-                      <button
-                        className="unassign-btn"
-                        onClick={() => handleUnassignUser(s.id, u.id)}
-                      >❌</button>
+              <div className="user-list mt-2">
+                <strong>👤 Người dùng:</strong>
+                {s.users?.length > 0 ? (
+                  s.users.map(user => (
+                    <div key={user.id} className="user-tag">
+                      {user.username}
+                      {["admin", "studymanager"].includes(role) && (
+                        <button
+                          onClick={() => handleUnassignUser(s.id, user.id)}
+                          className="unassign-btn"
+                        >
+                          ❌
+                        </button>
+                      )}
                     </div>
                   ))
                 ) : (
                   <p className="no-user">Chưa có người dùng</p>
                 )}
-                <button
-                  onClick={() => { setSelectedStudyForUser(s.id); setShowAssignUserModal(true); }}
-                  className="assign-user-btn mt-2"
-                >➕ Gán người dùng</button>
               </div>
+
 
               <div className="card-actions mt-4">
                 {role === "admin" || role === "studymanager" ? (
@@ -257,29 +261,43 @@ const StudyPage = () => {
       )}
 
       {showAssignUserModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h3>Chọn người dùng cho nghiên cứu {selectedStudyForUser}</h3>
-            <ul>
-              {unassignedUsers.length > 0 ? (
-                unassignedUsers.map(u => (
-                  <li key={u.id} className="mb-2">
-                    <button
-                      onClick={() => handleAssignUser(selectedStudyForUser, u.id)}
-                      className="bg-green-500 text-white px-4 py-2 rounded"
-                    >{u.username || u.name}</button>
-                  </li>
-                ))
-              ) : (
-                <li>🎉 Tất cả người dùng đã được gán</li>
-              )}
-            </ul>
-            <button
-              onClick={() => setShowAssignUserModal(false)}
-              className="bg-red-500 text-white px-4 py-2 mt-4 rounded"
-            >Đóng</button>
-          </div>
-        </div>
+  <div className="modal">
+    <div className="modal-content">
+      <h3>Chọn người dùng cho nghiên cứu {selectedStudyForUserAssign}</h3>
+
+      <ul>
+        {(() => {
+          const study = studies.find(s => s.id === selectedStudyForUserAssign);
+          const assignedUserIds = new Set(study?.users?.map(u => u.id));
+          const unassignedUsers = users.filter(u => !assignedUserIds.has(u.id));
+
+          if (unassignedUsers.length === 0) {
+            return <li>🎉 Tất cả người dùng đã được gán</li>;
+          }
+
+          return unassignedUsers.map(user => (
+            <li key={user.id}>
+              <button
+                onClick={() => handleAssignUser(selectedStudyForUserAssign, user.id)}
+                className="bg-green-500 text-white px-4 py-2 m-1"
+              >
+                {user.username}
+              </button>
+            </li>
+          ));
+        })()}
+      </ul>
+
+      <button
+        onClick={() => setShowAssignUserModal(false)}
+        className="bg-red-500 text-white px-4 py-2 mt-2"
+      >
+        Đóng
+      </button>
+    </div>
+  </div>
+)}
+
       )}
     </div>
   );
