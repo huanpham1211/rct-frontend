@@ -122,8 +122,10 @@ const StudyPage = () => {
             <th className="border p-2">Bắt đầu</th>
             <th className="border p-2">Kết thúc</th>
             <th className="border p-2">Cơ sở</th>
+            <th className="border p-2 text-center">Thao tác</th>
           </tr>
         </thead>
+
        <tbody>
         {studies.map((s) => (
           <tr key={s.id}>
@@ -151,8 +153,8 @@ const StudyPage = () => {
               ) : (
                 <span className="text-gray-500 italic">Chưa có cơ sở</span>
               )}
-            
-              <div className="mt-2 space-x-2">
+            </td>
+            <td className="border p-2 text-center space-y-1">
                 <button
                   className="bg-green-500 text-white px-3 py-1 rounded"
                   onClick={() => {
@@ -171,7 +173,6 @@ const StudyPage = () => {
                     ✏️ Sửa
                   </button>
                 )}
-              </div>
             </td>
           </tr>
         ))}
