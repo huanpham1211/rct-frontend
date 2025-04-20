@@ -200,6 +200,11 @@ const handleUnassignUser = async (studyId, userId) => {
                   onClick={() => { setSelectedStudyForSite(s.id); setShowAssignSiteModal(true); }}
                   className="assign-btn mt-2"
                 >➕ Gán cơ sở</button>
+
+                   <button onClick={() => {
+                    setSelectedStudyForUserAssign(s.id);
+                    setShowAssignUserModal(true);
+                  }} className="assign-btn">➕ Gán người dùng</button> 
               </div>
 
               <div className="user-list mt-2">
