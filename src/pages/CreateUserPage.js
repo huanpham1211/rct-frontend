@@ -10,19 +10,18 @@ const CreateUserPage = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const navigate = useNavigate();
-
-  const token = localStorage.getItem('token');
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-  
   const [userProfile, setUserProfile] = useState({
     first_name: '',
     last_name: '',
     title: ''
   });
+
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   const fetchUsers = async () => {
     const res = await fetch('https://rct-backend-1erq.onrender.com/api/users', {
@@ -38,8 +37,8 @@ const CreateUserPage = () => {
   };
 
   const handleProfileChange = (e) => {
-  const { name, value } = e.target;
-  setUserProfile((prev) => ({ ...prev, [name]: value }));
+    const { name, value } = e.target;
+    setUserProfile((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -50,7 +49,11 @@ const CreateUserPage = () => {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({ username: formData.username, password: formData.password, role: formData.role })
+      body: JSON.stringify({
+        username: formData.username,
+        password: formData.password,
+        role: formData.role
+      })
     });
     const data = await res.json();
     if (res.ok) {
@@ -59,6 +62,26 @@ const CreateUserPage = () => {
       fetchUsers();
     } else {
       toast.error(`❌ ${data.message || 'Lỗi tạo tài khoản'}`);
+    }
+  };
+
+  const handleUserSelect = async (userId) => {
+    setSelectedUser(userId);
+    if (!userId) {
+      setUserProfile({ first_name: '', last_name: '', title: '' });
+      return;
+    }
+
+    const res = await fetch(`https://rct-backend-1erq.onrender.com/api/users/${userId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await res.json();
+    if (res.ok) {
+      setUserProfile({
+        first_name: data.first_name || '',
+        last_name: data.last_name || '',
+        title: data.title || '',
+      });
     }
   };
 
@@ -98,6 +121,7 @@ const CreateUserPage = () => {
       toast.error(`❌ ${data.message || 'Lỗi cập nhật vai trò'}`);
     }
   };
+
   const handleUpdateProfile = async () => {
     const res = await fetch(`https://rct-backend-1erq.onrender.com/api/users/${selectedUser}/update-profile`, {
       method: 'POST',
@@ -107,7 +131,6 @@ const CreateUserPage = () => {
       },
       body: JSON.stringify(userProfile)
     });
-  
     const data = await res.json();
     if (res.ok) {
       toast.success("✅ Thông tin người dùng đã được cập nhật");
@@ -121,7 +144,6 @@ const CreateUserPage = () => {
   return (
     <div className="create-user-container">
       <ToastContainer position="top-right" autoClose={3000} />
-
       <button onClick={() => navigate('/dashboard')} className="back-button">← Quay về Dashboard</button>
       <h2>➕ Tạo tài khoản người dùng mới</h2>
 
@@ -146,22 +168,38 @@ const CreateUserPage = () => {
         <button type="submit">Tạo tài khoản</button>
       </form>
 
-      {message && <p className="form-message">{message}</p>}
-
       <hr />
       <h3>👥 Danh sách người dùng</h3>
-      <ul className="user-list">
-        {users.map((u) => (
-          <li key={u.id}>
-            <strong>{u.username}</strong> - Vai trò: {u.role}
-          </li>
-        ))}
-      </ul>
+      <table className="user-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Role</th>
+            <th>Họ</th>
+            <th>Tên</th>
+            <th>Chức danh</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((u) => (
+            <tr key={u.id}>
+              <td>{u.id}</td>
+              <td>{u.username}</td>
+              <td>{u.role}</td>
+              <td>{u.first_name || ''}</td>
+              <td>{u.last_name || ''}</td>
+              <td>{u.title || ''}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
 
       <hr />
       <h3>🔧 Quản lý người dùng</h3>
       <label>Chọn người dùng</label>
-      <select value={selectedUser} onChange={(e) => setSelectedUser(e.target.value)}>
+      <select value={selectedUser} onChange={(e) => handleUserSelect(e.target.value)}>
         <option value="">-- Chọn người dùng --</option>
         {users.map((u) => (
           <option key={u.id} value={u.id}>{u.username}</option>
@@ -176,7 +214,9 @@ const CreateUserPage = () => {
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
         />
-        <button onClick={handleResetPassword}>Đặt lại mật khẩu</button>
+        <button onClick={handleResetPassword} disabled={!selectedUser || !newPassword}>
+          Đặt lại mật khẩu
+        </button>
       </div>
 
       <div className="user-management-section">
@@ -200,6 +240,43 @@ const CreateUserPage = () => {
           disabled={!selectedUser || !formData.newSingleRole}
         >
           Cập nhật vai trò
+        </button>
+      </div>
+
+      <div className="user-management-section">
+        <h4>📝 Cập nhật họ tên và chức danh</h4>
+        <label>Họ</label>
+        <input
+          type="text"
+          name="first_name"
+          value={userProfile.first_name}
+          onChange={handleProfileChange}
+        />
+
+        <label>Tên</label>
+        <input
+          type="text"
+          name="last_name"
+          value={userProfile.last_name}
+          onChange={handleProfileChange}
+        />
+
+        <label>Chức danh</label>
+        <input
+          type="text"
+          name="title"
+          value={userProfile.title}
+          onChange={handleProfileChange}
+        />
+
+        <button
+          onClick={handleUpdateProfile}
+          disabled={
+            !selectedUser ||
+            (!userProfile.first_name && !userProfile.last_name && !userProfile.title)
+          }
+        >
+          Cập nhật thông tin
         </button>
       </div>
     </div>
