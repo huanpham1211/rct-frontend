@@ -108,7 +108,7 @@ const StudyPage = () => {
             <th className="border p-2">IRB</th>
             <th className="border p-2">Bắt đầu</th>
             <th className="border p-2">Kết thúc</th>
-            <th className="border p-2">Hành động</th>
+            <th className="border p-2">Cơ sở</th>
           </tr>
         </thead>
        <tbody>
@@ -121,7 +121,7 @@ const StudyPage = () => {
             <td className="border p-2">{s.start_date}</td>
             <td className="border p-2">{s.end_date || '—'}</td>
             <td className="border p-2">
-              {s.sites && s.sites.length > 0 ? (
+              {s.sites?.length > 0 ? (
                 <ul>
                   {s.sites.map((site) => (
                     <li key={site.id}>🏥 {site.name}</li>
@@ -130,15 +130,27 @@ const StudyPage = () => {
               ) : (
                 <span>Chưa có cơ sở</span>
               )}
-              <button
-                className="bg-green-500 text-white px-3 py-1 mt-1 rounded"
-                onClick={() => {
-                  setSelectedStudyId(s.id);
-                  setShowAssignModal(true);
-                }}
-              >
-                ➕ Gán cơ sở
-              </button>
+            
+              <div className="mt-2 flex flex-col gap-1">
+                <button
+                  className="bg-green-500 text-white px-3 py-1 rounded"
+                  onClick={() => {
+                    setSelectedStudyId(s.id);
+                    setShowAssignModal(true);
+                  }}
+                >
+                  ➕ Gán cơ sở
+                </button>
+            
+                {["admin", "studymanager"].includes(role) && (
+                  <button
+                    className="bg-yellow-500 text-white px-3 py-1 rounded"
+                    onClick={() => handleEdit(s)}
+                  >
+                    ✏️ Sửa
+                  </button>
+                )}
+              </div>
             </td>
           </tr>
         ))}
@@ -171,9 +183,8 @@ const StudyPage = () => {
             <h3>Chọn cơ sở cho nghiên cứu {selectedStudyId}</h3>
             <ul>
               {sites
-                .filter(site => {
-                  const study = studies.find(s => s.id === selectedStudyId);
-                  return !study?.sites?.some(assigned => assigned.id === site.id);
+                .filter(site => !assignedSiteIds.has(site.id));
+
                 })
                 .map((site) => (
                   <li key={site.id}>
