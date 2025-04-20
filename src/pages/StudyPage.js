@@ -87,7 +87,7 @@ const navigate = useNavigate();
   };
 
   return (
-    <div className="p-4">
+    <div className="study-container">
       <ToastContainer />
       <div className="flex justify-between items-center mb-4">
           <button
@@ -96,7 +96,7 @@ const navigate = useNavigate();
       >
         ← Quay về Dashboard
       </button>
-        <h2 className="text-xl font-bold">Quản lý nghiên cứu</h2>
+        <h2 className="text-xl font-bold text-center">Quản lý nghiên cứu</h2>
         {["admin", "studymanager"].includes(role) && (
           <button
             onClick={() => {
