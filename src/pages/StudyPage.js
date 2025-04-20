@@ -64,6 +64,19 @@ const StudyPage = () => {
       toast.error("❌ Không thể gán cơ sở");
     }
   };
+  const handleUnassignSite = async (studyId, siteId) => {
+    try {
+      await axios.post(
+        "https://rct-backend-1erq.onrender.com/api/studies/unassign",
+        { study_id: studyId, site_id: siteId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      toast.success("✅ Đã bỏ gán cơ sở");
+      fetchStudies();
+    } catch {
+      toast.error("❌ Không thể bỏ gán cơ sở");
+    }
+  };
 
   const handleEdit = (study) => {
     setEditStudy(study);
@@ -121,27 +134,33 @@ const StudyPage = () => {
             <td className="border p-2">{s.start_date}</td>
             <td className="border p-2">{s.end_date || '—'}</td>
             <td className="border p-2">
-              {s.sites?.length > 0 ? (
+              {s.sites && s.sites.length > 0 ? (
                 <ul>
                   {s.sites.map((site) => (
-                    <li key={site.id}>🏥 {site.name}</li>
+                    <li key={site.id} className="flex items-center justify-between">
+                      <span>🏥 {site.name}</span>
+                      <button
+                        className="bg-red-400 text-white px-2 py-1 text-xs rounded ml-2"
+                        onClick={() => handleUnassignSite(s.id, site.id)}
+                      >
+                        ❌ Bỏ gán
+                      </button>
+                    </li>
                   ))}
                 </ul>
               ) : (
-                <span>Chưa có cơ sở</span>
+                <span className="text-gray-500 italic">Chưa có cơ sở</span>
               )}
-            
-              <div className="mt-2 flex flex-col gap-1">
-                <button
-                  className="bg-green-500 text-white px-3 py-1 rounded"
-                  onClick={() => {
-                    setSelectedStudyId(s.id);
-                    setShowAssignModal(true);
-                  }}
-                >
-                  ➕ Gán cơ sở
-                </button>
-            
+              <button
+                className="bg-green-500 text-white px-3 py-1 mt-1 rounded"
+                onClick={() => {
+                  setSelectedStudyId(s.id);
+                  setShowAssignModal(true);
+                }}
+              >
+                ➕ Gán cơ sở
+              </button>
+            </td>    
                 {["admin", "studymanager"].includes(role) && (
                   <button
                     className="bg-yellow-500 text-white px-3 py-1 rounded"
