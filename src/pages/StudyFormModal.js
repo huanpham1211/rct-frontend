@@ -34,20 +34,33 @@ const StudyFormModal = ({ onClose, onSuccess, study = null }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    // Check required fields
+    const { name, protocol_number, irb_number, start_date } = formData;
+    if (!name || !protocol_number || !irb_number || !start_date) {
+      toast.error("⚠️ Vui lòng điền đầy đủ các trường bắt buộc (ngoại trừ ngày kết thúc)");
+      return;
+    }
+  
+    const payload = {
+      ...formData,
+      end_date: formData.end_date === "" ? null : formData.end_date
+    };
+  
     const endpoint = study
       ? `https://rct-backend-1erq.onrender.com/api/studies/${study.id}`
       : "https://rct-backend-1erq.onrender.com/api/studies";
-
+  
     const method = study ? "put" : "post";
-
+  
     try {
-      const res = await axios[method](endpoint, formData, {
+      const res = await axios[method](endpoint, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       });
-
+  
       toast.success(study ? "✅ Đã cập nhật nghiên cứu" : "✅ Đã tạo nghiên cứu mới");
       onSuccess(); // trigger reload
       onClose();   // close modal
@@ -57,21 +70,22 @@ const StudyFormModal = ({ onClose, onSuccess, study = null }) => {
     }
   };
 
+
   return (
     <div className="modal">
       <div className="modal-content">
         <h3>{study ? "Chỉnh sửa nghiên cứu" : "Thêm nghiên cứu mới"}</h3>
         <form onSubmit={handleSubmit}>
-          <label>Tên nghiên cứu</label>
+          <label>Tên nghiên cứu *</label>
           <input name="name" value={formData.name} onChange={handleChange} required />
 
-          <label>Mã protocol</label>
+          <label>Mã protocol *</label>
           <input name="protocol_number" value={formData.protocol_number} onChange={handleChange} />
 
-          <label>Số IRB</label>
+          <label>Số IRB *</label>
           <input name="irb_number" value={formData.irb_number} onChange={handleChange} />
 
-          <label>Ngày bắt đầu</label>
+          <label>Ngày bắt đầu *</label>
           <input type="date" name="start_date" value={formData.start_date} onChange={handleChange} />
 
           <label>Ngày kết thúc</label>
