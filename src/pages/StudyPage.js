@@ -183,9 +183,7 @@ const StudyPage = () => {
             <h3>Chọn cơ sở cho nghiên cứu {selectedStudyId}</h3>
             <ul>
               {sites
-                .filter(site => !assignedSiteIds.has(site.id));
-
-                })
+                .filter(site => !assignedSiteIds.has(site.id))
                 .map((site) => (
                   <li key={site.id}>
                     <button
