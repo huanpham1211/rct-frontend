@@ -120,3 +120,34 @@ hr {
   background-color: #ddd;
   margin: 40px 0 20px;
 }
+
+<div className="user-management-section">
+  <h4>👤 Cập nhật thông tin cá nhân</h4>
+  <input
+    type="text"
+    name="first_name"
+    placeholder="Họ"
+    value={userProfile.first_name}
+    onChange={handleProfileChange}
+  />
+  <input
+    type="text"
+    name="last_name"
+    placeholder="Tên"
+    value={userProfile.last_name}
+    onChange={handleProfileChange}
+  />
+  <input
+    type="text"
+    name="title"
+    placeholder="Chức danh"
+    value={userProfile.title}
+    onChange={handleProfileChange}
+  />
+  <button
+    onClick={handleUpdateProfile}
+    disabled={!selectedUser}
+  >
+    Cập nhật thông tin
+  </button>
+</div>
