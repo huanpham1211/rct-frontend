@@ -208,11 +208,11 @@ const handleUnassignUser = async (studyId, userId) => {
               </div>
 
               <div className="user-list mt-2">
-                <strong>👤 Người dùng:</strong>
+                <strong>👤 Thành viên nghiên cứu:</strong>
                 {s.users?.length > 0 ? (
                   s.users.map(user => (
                     <div key={user.id} className="user-tag">
-                      {user.username}
+                      {`${user.title}. ${user.last_name} ${user.first_name}`}
                       {["admin", "studymanager"].includes(role) && (
                         <button
                           onClick={() => handleUnassignUser(s.id, user.id)}
