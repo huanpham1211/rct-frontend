@@ -165,3 +165,80 @@
   justify-content: space-between;
   align-items: center;
 }
+
+.study-card-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.study-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  background-color: white;
+}
+
+.study-title {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.site-list {
+  margin-top: 10px;
+}
+
+.site-tag {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f3f3f3;
+  padding: 6px 10px;
+  margin-bottom: 6px;
+  border-radius: 4px;
+}
+
+.no-site {
+  font-style: italic;
+  color: gray;
+}
+
+.card-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.assign-btn, .edit-btn, .unassign-btn {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+}
+
+.assign-btn {
+  background-color: #3498db;
+}
+.assign-btn:hover {
+  background-color: #2980b9;
+}
+
+.edit-btn {
+  background-color: #f1c40f;
+}
+.edit-btn:hover {
+  background-color: #d4ac0d;
+}
+
+.unassign-btn {
+  background-color: #e74c3c;
+  margin-left: 8px;
+}
+.unassign-btn:hover {
+  background-color: #c0392b;
+}
+
