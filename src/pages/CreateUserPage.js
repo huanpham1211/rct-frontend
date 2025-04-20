@@ -18,6 +18,7 @@ const CreateUserPage = () => {
 
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     fetchUsers();
