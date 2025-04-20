@@ -1,13 +1,12 @@
-/* Container Styling */
+/* StudyPage.css */
+
 .study-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 30px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #fdfdfd;
 }
 
-/* Title Styling */
 .study-title {
   font-size: 26px;
   font-weight: 700;
@@ -15,46 +14,51 @@
   color: #2c3e50;
 }
 
-/* Table Styling */
 .study-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 32px;
-  background-color: white;
-  box-shadow: 0 0 6px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
   border-radius: 6px;
   overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .study-table th,
 .study-table td {
   padding: 12px 16px;
+  text-align: center;
   border-bottom: 1px solid #eee;
-  text-align: left;
 }
 
 .study-table th {
-  background-color: #f8f9fa;
-  color: #333;
+  background-color: #f9fafb;
+  color: #34495e;
   font-weight: 600;
 }
 
 .study-table tr:hover {
-  background-color: #f4f7fb;
+  background-color: #f1f8ff;
 }
 
-/* Button Base */
-.button {
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+}
+
+.assign-button,
+.edit-button,
+.unassign-button,
+.modal-content button {
   padding: 6px 12px;
   font-size: 14px;
-  border-radius: 5px;
   border: none;
+  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  margin-right: 8px;
 }
 
-/* Specific Button Styles */
 .assign-button {
   background-color: #3498db;
   color: white;
@@ -73,99 +77,90 @@
   background-color: #e67e22;
 }
 
-.remove-button {
+.unassign-button {
   background-color: #e74c3c;
   color: white;
 }
 
-.remove-button:hover {
+.unassign-button:hover {
   background-color: #c0392b;
 }
 
-.add-site-button {
-  background-color: #2ecc71;
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 6px 10px;
+  font-size: 14px;
+  border: none;
+  background-color: #3498db;
   color: white;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-.add-site-button:hover {
-  background-color: #27ae60;
+.pagination button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
 }
 
-/* Modal */
 .modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.45);
+  background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  z-index: 1000;
 }
 
 .modal-content {
   background: white;
-  padding: 30px;
+  padding: 24px;
   border-radius: 8px;
-  min-width: 320px;
-  max-width: 90%;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  min-width: 340px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .modal-content h3 {
-  margin-bottom: 18px;
-  font-size: 20px;
-  color: #2c3e50;
+  font-size: 18px;
+  margin-bottom: 16px;
 }
 
 .modal-content ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .modal-content li {
-  margin-bottom: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  margin-bottom: 10px;
 }
 
-/* Search */
-input[type="text"] {
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  width: 100%;
-  border-radius: 6px;
-  font-size: 15px;
-}
-
-/* Pagination */
-.pagination {
-  margin-top: 24px;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.pagination button {
-  padding: 6px 12px;
-  border-radius: 4px;
-  background-color: #3498db;
+.close-button {
+  background-color: #e74c3c;
+  margin-top: 10px;
   color: white;
+  padding: 8px 12px;
   border: none;
+  border-radius: 4px;
   cursor: pointer;
 }
 
-.pagination button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+.close-button:hover {
+  background-color: #c0392b;
 }
 
-/* Text styles */
-.text-muted {
-  color: #999;
-  font-style: italic;
+.site-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
