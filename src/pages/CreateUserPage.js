@@ -17,6 +17,12 @@ const CreateUserPage = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
+  
+  const [userProfile, setUserProfile] = useState({
+    first_name: '',
+    last_name: '',
+    title: ''
+  });
 
   const fetchUsers = async () => {
     const res = await fetch('https://rct-backend-1erq.onrender.com/api/users', {
@@ -29,6 +35,11 @@ const CreateUserPage = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleProfileChange = (e) => {
+  const { name, value } = e.target;
+  setUserProfile((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -85,6 +96,25 @@ const CreateUserPage = () => {
       fetchUsers();
     } else {
       toast.error(`❌ ${data.message || 'Lỗi cập nhật vai trò'}`);
+    }
+  };
+  const handleUpdateProfile = async () => {
+    const res = await fetch(`https://rct-backend-1erq.onrender.com/api/users/${selectedUser}/update-profile`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(userProfile)
+    });
+  
+    const data = await res.json();
+    if (res.ok) {
+      toast.success("✅ Thông tin người dùng đã được cập nhật");
+      fetchUsers();
+      setUserProfile({ first_name: '', last_name: '', title: '' });
+    } else {
+      toast.error(`❌ ${data.message || 'Lỗi khi cập nhật thông tin người dùng'}`);
     }
   };
 
