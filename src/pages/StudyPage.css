@@ -242,3 +242,7 @@
   background-color: #c0392b;
 }
 
+<button onClick={() => {
+  setSelectedStudyForUserAssign(s.id);
+  setShowAssignUserModal(true);
+}} className="assign-btn">➕ Gán người dùng</button>
