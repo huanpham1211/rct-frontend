@@ -151,23 +151,26 @@ const StudyPage = () => {
               ) : (
                 <span className="text-gray-500 italic">Chưa có cơ sở</span>
               )}
-              <button
-                className="bg-green-500 text-white px-3 py-1 mt-1 rounded"
-                onClick={() => {
-                  setSelectedStudyId(s.id);
-                  setShowAssignModal(true);
-                }}
-              >
-                ➕ Gán cơ sở
-              </button>
-            {["admin", "studymanager"].includes(role) && (
-              <button
-                className="bg-yellow-500 text-white px-3 py-1 rounded"
-                onClick={() => handleEdit(s)}
-              >
-                ✏️ Sửa
-              </button>
-            )}
+            
+              <div className="mt-2 space-x-2">
+                <button
+                  className="bg-green-500 text-white px-3 py-1 rounded"
+                  onClick={() => {
+                    setSelectedStudyId(s.id);
+                    setShowAssignModal(true);
+                  }}
+                >
+                  ➕ Gán cơ sở
+                </button>
+            
+                {["admin", "studymanager"].includes(role) && (
+                  <button
+                    className="bg-yellow-500 text-white px-3 py-1 rounded"
+                    onClick={() => handleEdit(s)}
+                  >
+                    ✏️ Sửa
+                  </button>
+                )}
               </div>
             </td>
           </tr>
