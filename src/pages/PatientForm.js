@@ -1,6 +1,6 @@
 // src/pages/PatientForm.js
 import React, { useEffect, useState } from 'react';
-import PatientFormModal from '../components/PatientFormModal';
+import PatientFormModal from '/PatientFormModal.js';
 import './PatientForm.css';
 
 const token = localStorage.getItem('token');
