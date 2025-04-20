@@ -148,7 +148,7 @@ const navigate = useNavigate();
               {s.sites && s.sites.length > 0 ? (
                 <ul>
                   {s.sites.map((site) => (
-                    <li key={site.id} className="flex items-center justify-between">
+                    <li key={site.id} className="mb-2">
                       <span>🏥 {site.name}</span>
                       <button
                         className="bg-red-400 text-white px-2 py-1 text-xs rounded ml-2"
