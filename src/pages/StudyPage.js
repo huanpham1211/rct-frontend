@@ -260,8 +260,40 @@ const handleUnassignUser = async (studyId, userId) => {
       )}
 
       {showAssignSiteModal && (
-        <div className="modal">...
-          {/* Similar modal content for sites */}
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Chọn cơ sở cho nghiên cứu {selectedStudyForSite}</h3>
+      
+            <ul>
+              {(() => {
+                const study = studies.find(s => s.id === selectedStudyForSite);
+                const assignedSiteIds = new Set(study?.sites?.map(s => s.id));
+                const unassignedSites = sites.filter(site => !assignedSiteIds.has(site.id));
+      
+                if (unassignedSites.length === 0) {
+                  return <li>🎉 Tất cả cơ sở đã được gán</li>;
+                }
+      
+                return unassignedSites.map(site => (
+                  <li key={site.id}>
+                    <button
+                      onClick={() => handleAssignSite(selectedStudyForSite, site.id)}
+                      className="bg-blue-500 text-white px-4 py-2 m-1"
+                    >
+                      {site.name}
+                    </button>
+                  </li>
+                ));
+              })()}
+            </ul>
+      
+            <button
+              onClick={() => setShowAssignSiteModal(false)}
+              className="bg-red-500 text-white px-4 py-2 mt-2"
+            >
+              Đóng
+            </button>
+          </div>
         </div>
       )}
 
@@ -274,7 +306,8 @@ const handleUnassignUser = async (studyId, userId) => {
         {(() => {
           const study = studies.find(s => s.id === selectedStudyForUserAssign);
           const assignedUserIds = new Set(study?.users?.map(u => u.id));
-          const unassignedUsers = users.filter(u => !assignedUserIds.has(u.id));
+          const unassignedUsers = users.filter(u => !assignedUserIds.has(u.id) && u.role !== 'admin');
+
 
           if (unassignedUsers.length === 0) {
             return <li>🎉 Tất cả người dùng đã được gán</li>;
@@ -286,7 +319,7 @@ const handleUnassignUser = async (studyId, userId) => {
                 onClick={() => handleAssignUser(selectedStudyForUserAssign, user.id)}
                 className="bg-green-500 text-white px-4 py-2 m-1"
               >
-                {user.username}
+                {`${user.title}. ${user.last_name} ${user.first_name}`}
               </button>
             </li>
           ));
