@@ -67,19 +67,23 @@ const navigate = useNavigate();
       toast.error("❌ Không thể gán cơ sở");
     }
   };
-  const handleUnassignSite = async (studyId, siteId) => {
-    try {
-      await axios.post(
-        "https://rct-backend-1erq.onrender.com/api/studies/unassign",
-        { study_id: studyId, site_id: siteId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      toast.success("✅ Đã bỏ gán cơ sở");
-      fetchStudies();
-    } catch {
-      toast.error("❌ Không thể bỏ gán cơ sở");
-    }
-  };
+const handleUnassignSite = async (studyId, siteId) => {
+  const confirm = window.confirm("Bạn có chắc chắn muốn bỏ gán cơ sở này?");
+  if (!confirm) return;
+
+  try {
+    await axios.post(
+      "https://rct-backend-1erq.onrender.com/api/studies/unassign",
+      { study_id: studyId, site_id: siteId },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    toast.success("✅ Đã bỏ gán cơ sở");
+    fetchStudies();
+  } catch {
+    toast.error("❌ Không thể bỏ gán cơ sở");
+  }
+};
+
 
   const handleEdit = (study) => {
     setEditStudy(study);
@@ -121,73 +125,47 @@ const navigate = useNavigate();
         className="border p-2 mb-4 w-full"
       />
 
-      <table className="w-full border-collapse">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="border p-2">ID</th>
-            <th className="border p-2">Tên</th>
-            <th className="border p-2">Protocol</th>
-            <th className="border p-2">IRB</th>
-            <th className="border p-2">Bắt đầu</th>
-            <th className="border p-2">Kết thúc</th>
-            <th className="border p-2">Cơ sở</th>
-            <th className="border p-2 text-center">Thao tác</th>
-          </tr>
-        </thead>
-
-       <tbody>
+      <div className="study-card-grid">
         {studies.map((s) => (
-          <tr key={s.id}>
-            <td className="border p-2">{s.id}</td>
-            <td className="border p-2">{s.name}</td>
-            <td className="border p-2">{s.protocol_number}</td>
-            <td className="border p-2">{s.irb_number}</td>
-            <td className="border p-2">{s.start_date}</td>
-            <td className="border p-2">{s.end_date || '—'}</td>
-            <td className="border p-2">
-              {s.sites && s.sites.length > 0 ? (
-                <ul>
-                  {s.sites.map((site) => (
-                    <li key={site.id} className="mb-2">
-                      <span>🏥 {site.name}</span>
-                      <button
-                        className="bg-red-400 text-white px-2 py-1 text-xs rounded ml-2"
-                        onClick={() => handleUnassignSite(s.id, site.id)}
-                      >
-                        ❌ Bỏ gán
-                      </button>
-                    </li>
-                  ))}
-                </ul>
+          <div key={s.id} className="study-card">
+            <h3 className="study-title">{s.name}</h3>
+            <p><strong>Protocol:</strong> {s.protocol_number}</p>
+            <p><strong>IRB:</strong> {s.irb_number}</p>
+            <p><strong>Bắt đầu:</strong> {s.start_date}</p>
+            <p><strong>Kết thúc:</strong> {s.end_date || "—"}</p>
+      
+            <div className="site-list">
+              {s.sites.length > 0 ? (
+                s.sites.map((site) => (
+                  <div key={site.id} className="site-tag">
+                    🏥 {site.name}
+                    <button
+                      className="unassign-btn"
+                      onClick={() => handleUnassignSite(s.id, site.id)}
+                    >
+                      ❌
+                    </button>
+                  </div>
+                ))
               ) : (
-                <span className="text-gray-500 italic">Chưa có cơ sở</span>
+                <p className="no-site">Chưa có cơ sở</p>
               )}
-            </td>
-            <td className="border p-2 text-center space-y-2 flex flex-col items-center">
-                <button
-                  className="bg-green-500 text-white px-3 py-1 rounded"
-                  onClick={() => {
-                    setSelectedStudyId(s.id);
-                    setShowAssignModal(true);
-                  }}
-                >
-                  ➕ Gán cơ sở
-                </button>
-            
-                {["admin", "studymanager"].includes(role) && (
-                  <button
-                    className="bg-yellow-500 text-white px-3 py-1 rounded"
-                    onClick={() => handleEdit(s)}
-                  >
-                    ✏️ Sửa
-                  </button>
-                )}
-            </td>
-          </tr>
+            </div>
+      
+            <div className="card-actions">
+              <button onClick={() => {
+                setSelectedStudyId(s.id);
+                setShowAssignModal(true);
+              }} className="assign-btn">➕ Gán cơ sở</button>
+      
+              {["admin", "studymanager"].includes(role) && (
+                <button onClick={() => handleEdit(s)} className="edit-btn">✏️ Sửa</button>
+              )}
+            </div>
+          </div>
         ))}
-      </tbody>
+      </div>
 
-      </table>
 
     <div className="pagination mt-4 flex justify-center space-x-2">
       <button onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))} disabled={currentPage === 1}>
