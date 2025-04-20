@@ -121,6 +121,12 @@ const CreateUserPage = () => {
       toast.error(`❌ ${data.message || 'Lỗi cập nhật vai trò'}`);
     }
   };
+const filteredUsers = users.filter((u) =>
+  (u.username || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+  (u.first_name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+  (u.last_name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+  (u.title || '').toLowerCase().includes(searchTerm.toLowerCase())
+);
 
   const handleUpdateProfile = async () => {
     const res = await fetch(`https://rct-backend-1erq.onrender.com/api/users/${selectedUser}/update-profile`, {
@@ -169,6 +175,14 @@ const CreateUserPage = () => {
       </form>
 
       <hr />
+      <label>Tìm kiếm người dùng</label>
+        <input
+          type="text"
+          placeholder="Tìm theo tên, chức danh, username..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+
       <h3>👥 Danh sách người dùng</h3>
       <table className="user-table">
         <thead>
@@ -182,7 +196,7 @@ const CreateUserPage = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map((u) => (
+          {filteredUsers.map((u) => (
             <tr key={u.id}>
               <td>{u.id}</td>
               <td>{u.username}</td>
