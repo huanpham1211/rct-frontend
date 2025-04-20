@@ -263,16 +263,16 @@ const filteredUsers = users.filter((u) =>
         <label>Họ</label>
         <input
           type="text"
-          name="first_name"
-          value={userProfile.first_name}
+          name="last_name"
+          value={userProfile.last_name}
           onChange={handleProfileChange}
-        />
-
+        />   
+            
         <label>Tên</label>
         <input
           type="text"
-          name="last_name"
-          value={userProfile.last_name}
+          name="first_name"
+          value={userProfile.first_name}
           onChange={handleProfileChange}
         />
 
