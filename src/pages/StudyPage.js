@@ -27,7 +27,9 @@ const StudyPage = () => {
   }, [currentPage, searchQuery]);
   
 const navigate = useNavigate();
-
+const [showAssignUserModal, setShowAssignUserModal] = useState(false);
+const [users, setUsers] = useState([]);
+  
   const fetchStudies = async () => {
     try {
       const res = await axios.get("https://rct-backend-1erq.onrender.com/api/studies", {
@@ -41,7 +43,20 @@ const navigate = useNavigate();
       toast.error("❌ Lỗi khi tải nghiên cứu");
     }
   };
+  
+const fetchUsers = async () => {
+  const res = await axios.get("https://rct-backend-1erq.onrender.com/api/users", {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  setUsers(res.data);
+};
 
+useEffect(() => {
+  fetchStudies();
+  fetchSites();
+  fetchUsers(); // also fetch users
+}, [currentPage, searchQuery]);
+  
   const fetchSites = async () => {
     try {
       const res = await axios.get("https://rct-backend-1erq.onrender.com/api/sites", {
