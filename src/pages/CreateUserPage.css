@@ -1,5 +1,5 @@
 .create-user-container {
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 30px;
   background-color: #ffffff;
@@ -8,146 +8,81 @@
   font-family: 'Segoe UI', sans-serif;
 }
 
-h2 {
+.back-button {
+  background-color: #3498db;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
   margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  background-color: #2980b9;
+}
+
+h2, h3, h4 {
   color: #2c3e50;
-}
-
-h3 {
-  margin-top: 40px;
-  margin-bottom: 10px;
-  color: #34495e;
-  border-bottom: 2px solid #eee;
-  padding-bottom: 4px;
-}
-
-h4 {
-  margin-top: 20px;
-  margin-bottom: 8px;
-  color: #555;
+  margin-top: 24px;
 }
 
 label {
   display: block;
-  margin-top: 12px;
+  margin-top: 16px;
   font-weight: 600;
-  color: #333;
+  color: #34495e;
 }
 
-input,
-select {
+input, select {
   width: 100%;
   padding: 10px 12px;
   margin-top: 6px;
   margin-bottom: 16px;
   border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
-  transition: border-color 0.2s ease;
-}
-
-input:focus,
-select:focus {
-  border-color: #007bff;
-  outline: none;
+  border-radius: 8px;
 }
 
 button {
-  background-color: #007bff;
+  background-color: #2ecc71;
   color: white;
   padding: 10px 16px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.2s ease;
+  margin-top: 10px;
 }
 
 button:hover {
-  background-color: #0056b3;
-}
-
-.back-button {
-  background-color: #6c757d;
-  margin-bottom: 20px;
-}
-
-.back-button:hover {
-  background-color: #5a6268;
-}
-
-.form-message {
-  font-weight: 500;
-  color: #27ae60;
-  margin-top: 10px;
-  margin-bottom: 20px;
+  background-color: #27ae60;
 }
 
 .user-list {
   list-style: none;
   padding-left: 0;
   margin-top: 10px;
-  border: 1px solid #eee;
-  border-radius: 8px;
-}
-
-.user-list li {
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
-}
-
-.user-list li:last-child {
-  border-bottom: none;
 }
 
 .user-management-section {
   margin-top: 20px;
-  padding: 16px;
-  border: 1px solid #e0e0e0;
+  padding: 15px;
+  background-color: #f7f7f7;
   border-radius: 8px;
-  background-color: #fafafa;
 }
 
-.user-management-section input,
-.user-management-section select {
-  margin-top: 6px;
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
 }
 
-hr {
-  border: none;
-  height: 1px;
-  background-color: #ddd;
-  margin: 40px 0 20px;
+.user-table th,
+.user-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
 }
 
-<div className="user-management-section">
-  <h4>👤 Cập nhật thông tin cá nhân</h4>
-  <input
-    type="text"
-    name="first_name"
-    placeholder="Họ"
-    value={userProfile.first_name}
-    onChange={handleProfileChange}
-  />
-  <input
-    type="text"
-    name="last_name"
-    placeholder="Tên"
-    value={userProfile.last_name}
-    onChange={handleProfileChange}
-  />
-  <input
-    type="text"
-    name="title"
-    placeholder="Chức danh"
-    value={userProfile.title}
-    onChange={handleProfileChange}
-  />
-  <button
-    onClick={handleUpdateProfile}
-    disabled={!selectedUser}
-  >
-    Cập nhật thông tin
-  </button>
-</div>
+.user-table th {
+  background-color: #f2f2f2;
+}
