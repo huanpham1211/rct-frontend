@@ -163,7 +163,7 @@ const navigate = useNavigate();
                 <span className="text-gray-500 italic">Chưa có cơ sở</span>
               )}
             </td>
-            <td className="border p-2 text-center space-y-1">
+            <td className="border p-2 text-center space-y-2 flex flex-col items-center">
                 <button
                   className="bg-green-500 text-white px-3 py-1 rounded"
                   onClick={() => {
