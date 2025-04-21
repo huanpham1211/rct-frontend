@@ -32,7 +32,7 @@ function App() {
         />
         <Route
           path="/add-patient"
-          element={<ProtectedRoute allowedRoles={['admin', 'recruiter']} element={<PatientForm />} />}
+          element={<ProtectedRoute allowedRoles={['admin', 'recruiter', 'physician']} element={<PatientForm />} />}
         />
         <Route
           path="/lab-result"
