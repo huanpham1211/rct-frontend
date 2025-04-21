@@ -54,7 +54,7 @@ const StudyFormModal = ({ onClose, onSuccess, study = null }) => {
 
     const payload = {
       ...formData,
-      end_date: formData.end_date === "" ? null : formData.end_date
+      end_date: formData.end_date === "" ? null : formData.end_date,
       is_randomized: formData.is_randomized,
       randomization_type: formData.randomization_type,
       block_size: formData.block_size,
