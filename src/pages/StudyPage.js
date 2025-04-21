@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import StudyFormModal from "./StudyFormModal";
+import TreatmentArmModal from "./TreatmentArmModal";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './StudyPage.css';
@@ -10,11 +11,12 @@ const StudyPage = () => {
   const [studies, setStudies] = useState([]);
   const [sites, setSites] = useState([]);
   const [users, setUsers] = useState([]);
-
   const [selectedStudyForSite, setSelectedStudyForSite] = useState(null);
+  const [selectedStudyForUserAssign, setSelectedStudyForUserAssign] = useState(null);
+  const [selectedStudyForArms, setSelectedStudyForArms] = useState(null);
   const [showAssignSiteModal, setShowAssignSiteModal] = useState(false);
-  const [selectedStudyForUser, setSelectedStudyForUser] = useState(null);
   const [showAssignUserModal, setShowAssignUserModal] = useState(false);
+  const [showArmModal, setShowArmModal] = useState(false);
   const [showStudyModal, setShowStudyModal] = useState(false);
   const [editStudy, setEditStudy] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -22,7 +24,6 @@ const StudyPage = () => {
   const [pageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
-  const [selectedStudyForUserAssign, setSelectedStudyForUserAssign] = useState(null);
 
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
@@ -180,6 +181,44 @@ const handleUnassignUser = async (studyId, userId) => {
               <p><strong>IRB:</strong> {s.irb_number}</p>
               <p><strong>Bắt đầu:</strong> {s.start_date}</p>
               <p><strong>Kết thúc:</strong> {s.end_date || "—"}</p>
+            {role === "admin" || role === "studymanager" ? (
+              <div className="flex items-center mt-2">
+                <input
+                  type="checkbox"
+                  checked={s.is_randomized}
+                  onChange={(e) => handleToggleRCT(s.id, e.target.checked)}
+                  className="mr-2"
+                />
+                <label>Là nghiên cứu ngẫu nhiên (RCT)</label>
+              </div>
+            ) : s.is_randomized && (
+              <p className="text-green-600 font-bold mt-2">📌 Nghiên cứu RCT</p>
+            )}
+
+            {s.is_randomized && (
+              <>
+                <button
+                  className="assign-btn mt-2"
+                  onClick={() => {
+                    setSelectedStudyForArms(s.id);
+                    setShowArmModal(true);
+                  }}
+                >🎯 Quản lý nhánh điều trị</button>
+
+                {s.treatment_arms?.length > 0 && (
+                  <div className="arm-list mt-2">
+                    <strong>Nhánh điều trị:</strong>
+                    <div className="flex flex-wrap mt-1">
+                      {s.treatment_arms.map((arm) => (
+                        <span key={arm.id} className="arm-tag">
+                          {arm.name} ({arm.allocation_ratio})
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
 
               <div className="site-list">
                 <h4>🏥 Cơ sở:</h4>
@@ -250,7 +289,13 @@ const handleUnassignUser = async (studyId, userId) => {
           &gt;
         </button>
       </div>
-
+      {showArmModal && (
+        <TreatmentArmModal
+          studyId={selectedStudyForArms}
+          onClose={() => setShowArmModal(false)}
+          onSuccess={fetchStudies}
+        />
+      )}
       {showStudyModal && (
         <StudyFormModal
           onClose={() => setShowStudyModal(false)}
