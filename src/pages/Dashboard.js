@@ -29,7 +29,7 @@ const Dashboard = () => {
 
       <div className="dashboard-section">
         <div className="shortcut-grid">
-          {(role === 'admin' || role === 'recruiter') && (
+          {(role === 'admin' || role === 'recruiter' || role === 'physician') && (
             <Link to="/add-patient" className="shortcut-item">
               <div className="shortcut-icon">📋</div>
               <div className="shortcut-text">Nhập bệnh nhân mới</div>
