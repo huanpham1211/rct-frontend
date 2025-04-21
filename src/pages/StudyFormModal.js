@@ -55,6 +55,10 @@ const StudyFormModal = ({ onClose, onSuccess, study = null }) => {
     const payload = {
       ...formData,
       end_date: formData.end_date === "" ? null : formData.end_date
+      is_randomized: formData.is_randomized,
+      randomization_type: formData.randomization_type,
+      block_size: formData.block_size,
+      stratification_factors: formData.stratification_factors
     };
 
     const endpoint = study
@@ -105,38 +109,43 @@ const StudyFormModal = ({ onClose, onSuccess, study = null }) => {
               type="checkbox"
               name="is_randomized"
               checked={formData.is_randomized}
-              onChange={handleChange}
-            />
+              onChange={(e) => setFormData(prev => ({
+                ...prev,
+                is_randomized: e.target.checked
+              }))}            />
             Là nghiên cứu ngẫu nhiên (RCT)
           </label>
 
           {formData.is_randomized && (
             <>
               <label>Kiểu ngẫu nhiên</label>
-              <select name="randomization_type" value={formData.randomization_type} onChange={handleChange}>
-                <option value="">-- Chọn --</option>
-                <option value="simple">Đơn giản</option>
-                <option value="block">Block</option>
-                <option value="cluster">Cụm</option>
-                <option value="stratified">Tầng</option>
+              <select
+                name="randomization_type"
+                value={formData.randomization_type}
+                onChange={handleChange}
+              >
+                <option value="Block">Block</option>
+                <option value="Stratified">Stratified</option>
+                <option value="Cluster">Cluster</option>
               </select>
-
-              {formData.randomization_type === "block" && (
-                <>
-                  <label>Kích thước block</label>
-                  <input type="number" name="block_size" value={formData.block_size} onChange={handleChange} />
-                </>
-              )}
-
+          
+              <label>Kích thước block</label>
+              <input
+                type="number"
+                name="block_size"
+                value={formData.block_size || ""}
+                onChange={handleChange}
+              />
+          
               <label>Yếu tố phân tầng (JSON)</label>
               <textarea
                 name="stratification_factors"
-                value={formData.stratification_factors}
+                value={formData.stratification_factors || ""}
                 onChange={handleChange}
-                placeholder='{"age": "<60", "sex": "female"}'
-              />
+          />
             </>
           )}
+
 
           <button type="submit">
             {study ? "Cập nhật" : "Tạo"}
