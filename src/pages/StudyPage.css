@@ -242,4 +242,21 @@
   background-color: #c0392b;
 }
 
+.rct-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.rct-badge {
+  display: inline-block;
+  background-color: #22c55e;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 8px;
+}
 
