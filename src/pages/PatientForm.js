@@ -12,7 +12,7 @@ const PatientForm = () => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    fetch('/api/assigned-studies', {
+    fetch('https://rct-backend-1erq.onrender.com/api/assigned-studies', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(async res => {
