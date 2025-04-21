@@ -70,6 +70,19 @@ const StudyPage = () => {
       toast.error("❌ Lỗi khi tải danh sách người dùng");
     }
   };
+const handleToggleRCT = async (studyId, isRandomized) => {
+  try {
+    await axios.put(
+      `https://rct-backend-1erq.onrender.com/api/studies/${studyId}`,
+      { is_randomized: isRandomized },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    toast.success("✅ Đã cập nhật trạng thái RCT");
+    fetchStudies();
+  } catch (err) {
+    toast.error("❌ Không thể cập nhật RCT");
+  }
+};
 
   const handleAssignSite = async (studyId, siteId) => {
     try {
