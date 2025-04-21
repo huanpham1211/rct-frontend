@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; 
-import './PatientForm.css';
+import './PatientFormModal.css';
 
-const PatientForm = () => {
+const PatientFormModal = () => {
   const [formData, setFormData] = useState({
     name: '',
     dob: '',
@@ -167,4 +167,4 @@ const PatientForm = () => {
   );
 };
 
-export default PatientForm;
+export default PatientFormModal;
