@@ -15,9 +15,25 @@ const PatientForm = () => {
     fetch('/api/assigned-studies', {
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then(res => res.json())
-      .then(data => setStudies(data));
+      .then(async res => {
+        if (!res.ok) {
+          const text = await res.text(); // read response as text
+          console.error("Error fetching studies:", text);
+          throw new Error("Failed to fetch assigned studies");
+        }
+        return res.json();
+      })
+      .then(data => setStudies(data))
+      .catch(err => {
+        console.error("❌ Fetch error:", err);
+        // optional: redirect to login if unauthorized
+        if (err.message.includes("401") || err.message.includes("unauthorized")) {
+          localStorage.clear();
+          window.location.href = '/login';
+        }
+      });
   }, []);
+
 
   const handleStudySelect = (study) => {
     if (study.sites.length === 1) {
