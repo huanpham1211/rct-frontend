@@ -61,7 +61,7 @@ const PatientForm = () => {
 
       {selectedStudy && selectedStudy.sites.length > 1 && !selectedSite && (
         <div className="site-selector">
-          <h4>Choose site for <strong>{selectedStudy.name}</strong></h4>
+          <h4>Chọn địa điểm cho nghiên cứu <strong>{selectedStudy.name}</strong></h4>
           {selectedStudy.sites.map(site => (
             <button key={site.id} onClick={() => handleSiteSelect(site.id)}>
               {site.name}
