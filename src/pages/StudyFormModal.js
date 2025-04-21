@@ -124,27 +124,39 @@ const StudyFormModal = ({ onClose, onSuccess, study = null }) => {
                 value={formData.randomization_type}
                 onChange={handleChange}
               >
+                <option value="">-- Chọn kiểu ngẫu nhiên --</option>
                 <option value="Block">Block</option>
                 <option value="Stratified">Stratified</option>
                 <option value="Cluster">Cluster</option>
               </select>
           
-              <label>Kích thước block</label>
-              <input
-                type="number"
-                name="block_size"
-                value={formData.block_size || ""}
-                onChange={handleChange}
-              />
+              {formData.randomization_type === "Block" && (
+                <>
+                  <label>Kích thước block</label>
+                  <input
+                    type="number"
+                    name="block_size"
+                    min="2"
+                    value={formData.block_size || ""}
+                    onChange={handleChange}
+                  />
+                </>
+              )}
           
-              <label>Yếu tố phân tầng (JSON)</label>
-              <textarea
-                name="stratification_factors"
-                value={formData.stratification_factors || ""}
-                onChange={handleChange}
-          />
+              {formData.randomization_type === "Stratified" && (
+                <>
+                  <label>Yếu tố phân tầng (nhập JSON, ví dụ: ["age", "gender"])</label>
+                  <textarea
+                    name="stratification_factors"
+                    value={formData.stratification_factors || ""}
+                    onChange={handleChange}
+                    placeholder='["age", "gender"]'
+                  />
+                </>
+              )}
             </>
           )}
+
 
 
           <button type="submit">
