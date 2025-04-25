@@ -419,7 +419,6 @@ const handleUnassignUser = async (studyId, userId) => {
       </button>
     </div>
   </div>
-)}
 
       )}
     </div>
