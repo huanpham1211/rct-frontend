@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import "./StudyVariableModal.css";
 
 const StudyVariableModal = ({ studyId, onClose, onSuccess }) => {
   const [variables, setVariables] = useState([]);
