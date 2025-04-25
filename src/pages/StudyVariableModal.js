@@ -22,11 +22,12 @@ const StudyVariableModal = ({ studyId, onClose, onSuccess }) => {
       const res = await axios.get(`/api/studies/${studyId}/variables`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setVariables(res.data || []);
+      setVariables(res.data.variables || []);
     } catch {
       toast.error("❌ Lỗi khi tải biến số");
     }
   };
+
 
   const handleAdd = async () => {
     if (!newVar.name) return toast.error("⚠️ Vui lòng nhập tên biến");
