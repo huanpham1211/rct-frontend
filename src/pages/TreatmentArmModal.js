@@ -6,7 +6,8 @@ import "./TreatmentArmModal.css";
 const TreatmentArmModal = ({ studyId, onClose, onSuccess }) => {
   const token = localStorage.getItem("token");
   const [arms, setArms] = useState([]);
-  const [newArm, setNewArm] = useState({ name: "", allocation_ratio: 1 });
+  const [newArm, setNewArm] = useState({ name: "", allocation_ratio: 1, description: "" });
+
 
   useEffect(() => {
     fetchArms();
@@ -53,7 +54,7 @@ const TreatmentArmModal = ({ studyId, onClose, onSuccess }) => {
     if (!window.confirm("Xác nhận xoá nhánh điều trị này?")) return;
     try {
       await axios.delete(
-        `https://rct-backend-1erq.onrender.com/api/studies/${studyId}/delete-arms/${armId}`,
+        `https://rct-backend-1erq.onrender.com/api/studies/arms/${armId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
