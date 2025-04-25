@@ -1,0 +1,114 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+
+const StudyVariableModal = ({ studyId, onClose, onSuccess }) => {
+  const [variables, setVariables] = useState([]);
+  const [newVar, setNewVar] = useState({
+    name: "",
+    variable_type: "text",
+    required: false,
+    options: ""
+  });
+
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    fetchVariables();
+  }, []);
+
+  const fetchVariables = async () => {
+    try {
+      const res = await axios.get(`/api/studies/${studyId}/variables`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setVariables(res.data || []);
+    } catch {
+      toast.error("❌ Lỗi khi tải biến số");
+    }
+  };
+
+  const handleAdd = async () => {
+    if (!newVar.name) return toast.error("⚠️ Vui lòng nhập tên biến");
+    try {
+      await axios.post(`/api/studies/${studyId}/variables`, newVar, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      toast.success("✅ Đã thêm biến mới");
+      setNewVar({ name: "", variable_type: "text", required: false, options: "" });
+      fetchVariables();
+      onSuccess?.();
+    } catch {
+      toast.error("❌ Không thể thêm biến");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Xóa biến này?")) return;
+    try {
+      await axios.delete(`/api/studies/variables/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      toast.success("🗑️ Đã xóa biến");
+      fetchVariables();
+    } catch {
+      toast.error("❌ Lỗi khi xóa");
+    }
+  };
+
+  return (
+    <div className="modal">
+      <div className="modal-content" style={{ width: "90%", maxWidth: "800px" }}>
+        <h3>⚙️ Biến số cho nghiên cứu {studyId}</h3>
+
+        <div className="space-y-2 mb-4">
+          <input
+            placeholder="Tên biến (VD: Huyết áp)"
+            value={newVar.name}
+            onChange={(e) => setNewVar({ ...newVar, name: e.target.value })}
+          />
+          <select
+            value={newVar.variable_type}
+            onChange={(e) => setNewVar({ ...newVar, variable_type: e.target.value })}
+          >
+            <option value="text">Text</option>
+            <option value="number">Number</option>
+            <option value="integer">Integer</option>
+            <option value="boolean">Yes/No</option>
+            <option value="select">Dropdown</option>
+            <option value="multiselect">Multi-Select</option>
+            <option value="date">Date</option>
+          </select>
+          <input
+            placeholder="Tùy chọn (cách nhau bởi dấu phẩy nếu là select)"
+            value={newVar.options}
+            onChange={(e) => setNewVar({ ...newVar, options: e.target.value })}
+          />
+          <label>
+            <input
+              type="checkbox"
+              checked={newVar.required}
+              onChange={(e) => setNewVar({ ...newVar, required: e.target.checked })}
+            />
+            Bắt buộc?
+          </label>
+          <button className="assign-btn" onClick={handleAdd}>➕ Thêm biến</button>
+        </div>
+
+        <ul>
+          {variables.map(v => (
+            <li key={v.id}>
+              <strong>{v.name}</strong> ({v.variable_type}) {v.required ? "⭐" : ""} 
+              {v.options && <span> – Tuỳ chọn: {v.options}</span>}
+              <button className="unassign-btn ml-2" onClick={() => handleDelete(v.id)}>❌</button>
+            </li>
+          ))}
+        </ul>
+
+        <button onClick={onClose} className="bg-red-500 text-white px-4 py-2 mt-4 rounded">Đóng</button>
+      </div>
+    </div>
+  );
+};
+
+export default StudyVariableModal;
