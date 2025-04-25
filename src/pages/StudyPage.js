@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import StudyFormModal from "./StudyFormModal";
 import TreatmentArmModal from "./TreatmentArmModal";
+import StudyVariableModal from "./StudyVariableModal";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './StudyPage.css';
