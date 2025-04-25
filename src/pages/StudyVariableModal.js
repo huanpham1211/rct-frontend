@@ -85,14 +85,16 @@ const StudyVariableModal = ({ studyId, onClose, onSuccess }) => {
             value={newVar.options}
             onChange={(e) => setNewVar({ ...newVar, options: e.target.value })}
           />
-          <label>
+          <div className="flex items-center gap-2 mb-4">
             <input
               type="checkbox"
+              id="required"
               checked={newVar.required}
               onChange={(e) => setNewVar({ ...newVar, required: e.target.checked })}
             />
-            Bắt buộc?
-          </label>
+            <label htmlFor="required" className="text-sm text-gray-700">Bắt buộc?</label>
+          </div>
+
           <button className="assign-btn" onClick={handleAdd}>➕ Thêm biến</button>
         </div>
 
