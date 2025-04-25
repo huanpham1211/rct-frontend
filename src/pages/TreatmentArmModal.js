@@ -65,42 +65,62 @@ const TreatmentArmModal = ({ studyId, onClose, onSuccess }) => {
     }
   };
 
-  return (
-    <div className="modal">
-      <div className="modal-content">
-        <h3>📦 Quản lý nhánh điều trị</h3>
+return (
+  <div className="modal">
+    <div className="modal-content">
+      <h3>📦 Quản lý nhánh điều trị</h3>
 
-        <div className="arm-form">
-          <input
-            type="text"
-            name="name"
-            placeholder="Tên nhánh (VD: A hoặc Placebo)"
-            value={newArm.name}
-            onChange={handleChange}
-          />
-          <input
-            type="number"
-            name="allocation_ratio"
-            placeholder="Tỷ lệ (VD: 1 hoặc 2)"
-            value={newArm.allocation_ratio}
-            onChange={handleChange}
-          />
-          <button onClick={handleAddArm} className="btn-add">➕ Thêm</button>
-        </div>
+      <div className="arm-form space-y-3">
+        <input
+          type="text"
+          name="name"
+          placeholder="Tên nhánh (VD: A hoặc Placebo)"
+          value={newArm.name}
+          onChange={handleChange}
+        />
+        <input
+          type="text"
+          name="description"
+          placeholder="Mô tả (VD: Điều trị tiêu chuẩn hoặc giả dược)"
+          value={newArm.description}
+          onChange={handleChange}
+        />
+        <input
+          type="number"
+          name="allocation_ratio"
+          placeholder="Tỷ lệ phân bổ (VD: 1, 2 – để tính tỷ lệ phần trăm)"
+          value={newArm.allocation_ratio}
+          onChange={handleChange}
+          min="1"
+        />
+        <small className="text-gray-600">
+          * Tổng các tỷ lệ sẽ được dùng để xác định phần trăm phân bổ. VD: A:1, B:2 → A=33%, B=67%
+        </small>
 
-        <ul className="arm-list">
-          {arms.map((arm) => (
-            <li key={arm.id}>
-              <strong>{arm.name}</strong> — Tỷ lệ: {arm.allocation_ratio}
-              <button
-                className="btn-delete"
-                onClick={() => handleDeleteArm(arm.id)}
-              >
-                ❌
-              </button>
-            </li>
-          ))}
-        </ul>
+        <button onClick={handleAddArm} className="btn-add">➕ Thêm</button>
+      </div>
+
+      <ul className="arm-list mt-4">
+        {arms.map((arm) => (
+          <li key={arm.id} className="mb-2">
+            <strong>{arm.name}</strong> — {arm.description || 'Không mô tả'} — Tỷ lệ: {arm.allocation_ratio}
+            <button
+              className="btn-delete ml-2"
+              onClick={() => handleDeleteArm(arm.id)}
+            >
+              ❌
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      <button onClick={onClose} className="bg-red-500 text-white px-4 py-2 mt-6 rounded">
+        Đóng
+      </button>
+    </div>
+  </div>
+);
+
 
         <button onClick={onClose} className="bg-red-500 text-white px-4 py-2 mt-4 rounded">
           Đóng
