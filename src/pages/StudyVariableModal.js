@@ -20,7 +20,7 @@ const StudyVariableModal = ({ studyId, onClose, onSuccess }) => {
 
   const fetchVariables = async () => {
     try {
-      const res = await axios.get(`/${studyId}/variables`, {
+      const res = await axios.get(`/api/studies/${studyId}/variables`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setVariables(res.data.variables || []);
@@ -33,7 +33,7 @@ const StudyVariableModal = ({ studyId, onClose, onSuccess }) => {
   const handleAdd = async () => {
     if (!newVar.name) return toast.error("⚠️ Vui lòng nhập tên biến");
     try {
-      await axios.post(`/${studyId}/variables`, newVar, {
+      await axios.post(`/api/studies/${studyId}/variables`, newVar, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("✅ Đã thêm biến mới");
@@ -48,7 +48,7 @@ const StudyVariableModal = ({ studyId, onClose, onSuccess }) => {
   const handleDelete = async (id) => {
     if (!window.confirm("Xóa biến này?")) return;
     try {
-      await axios.delete(`/variables/${id}`, {
+      await axios.delete(`/api/studies/variables/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("🗑️ Đã xóa biến");
