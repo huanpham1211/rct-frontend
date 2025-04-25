@@ -19,6 +19,8 @@ const StudyPage = () => {
   const [showArmModal, setShowArmModal] = useState(false);
   const [showStudyModal, setShowStudyModal] = useState(false);
   const [editStudy, setEditStudy] = useState(null);
+  const [selectedStudyForVariables, setSelectedStudyForVariables] = useState(null);
+  const [showVariableModal, setShowVariableModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(5);
@@ -216,6 +218,15 @@ const handleUnassignUser = async (studyId, userId) => {
                     setShowArmModal(true);
                   }}
                 >🎯 Quản lý nhánh điều trị</button>
+                <button
+                  className="assign-btn mt-2"
+                  onClick={() => {
+                    setSelectedStudyForVariables(s.id);
+                    setShowVariableModal(true);
+                  }}
+                >
+                  ⚙️ Quản lý biến số
+                </button>
 
                 {s.treatment_arms?.length > 0 && (
                   <div className="arm-list mt-2">
@@ -347,6 +358,23 @@ const handleUnassignUser = async (studyId, userId) => {
             <button
               onClick={() => setShowAssignSiteModal(false)}
               className="bg-red-500 text-white px-4 py-2 mt-2"
+            >
+              Đóng
+            </button>
+          </div>
+        </div>
+      )}
+      {showVariableModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>⚙️ Quản lý biến số cho nghiên cứu {selectedStudyForVariables}</h3>
+      
+            {/* Placeholder: Replace this with your StudyVariableModal component */}
+            <p>🚧 Đây là nơi để quản lý biến số tùy chỉnh của nghiên cứu.</p>
+      
+            <button
+              onClick={() => setShowVariableModal(false)}
+              className="bg-red-500 text-white px-4 py-2 mt-4"
             >
               Đóng
             </button>
