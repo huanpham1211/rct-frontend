@@ -366,22 +366,13 @@ const handleUnassignUser = async (studyId, userId) => {
         </div>
       )}
       {showVariableModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h3>⚙️ Quản lý biến số cho nghiên cứu {selectedStudyForVariables}</h3>
-      
-            {/* Placeholder: Replace this with your StudyVariableModal component */}
-            <p>🚧 Đây là nơi để quản lý biến số tùy chỉnh của nghiên cứu.</p>
-      
-            <button
-              onClick={() => setShowVariableModal(false)}
-              className="bg-red-500 text-white px-4 py-2 mt-4"
-            >
-              Đóng
-            </button>
-          </div>
-        </div>
+        <StudyVariableModal
+          studyId={selectedStudyForVariables}
+          onClose={() => setShowVariableModal(false)}
+          onSuccess={fetchStudies}
+        />
       )}
+
 
       {showAssignUserModal && (
   <div className="modal">
