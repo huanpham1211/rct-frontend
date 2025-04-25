@@ -15,7 +15,7 @@ const TreatmentArmModal = ({ studyId, onClose, onSuccess }) => {
   const fetchArms = async () => {
     try {
       const res = await axios.get(
-        `https://rct-backend-1erq.onrender.com/api/studies/${studyId}/arms`,
+        `https://rct-backend-1erq.onrender.com/api/studies/${studyId}/get-arms`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -35,7 +35,7 @@ const TreatmentArmModal = ({ studyId, onClose, onSuccess }) => {
     if (!newArm.name || newArm.allocation_ratio <= 0) return;
     try {
       await axios.post(
-        `https://rct-backend-1erq.onrender.com/api/studies/${studyId}/arms`,
+        `https://rct-backend-1erq.onrender.com/api/studies/${studyId}/add-arms`,
         newArm,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -53,7 +53,7 @@ const TreatmentArmModal = ({ studyId, onClose, onSuccess }) => {
     if (!window.confirm("Xác nhận xoá nhánh điều trị này?")) return;
     try {
       await axios.delete(
-        `https://rct-backend-1erq.onrender.com/api/studies/${studyId}/arms/${armId}`,
+        `https://rct-backend-1erq.onrender.com/api/studies/${studyId}/delete-arms/${armId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
