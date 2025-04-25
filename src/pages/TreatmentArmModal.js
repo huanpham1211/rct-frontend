@@ -114,14 +114,6 @@ return (
         ))}
       </ul>
 
-      <button onClick={onClose} className="bg-red-500 text-white px-4 py-2 mt-6 rounded">
-        Đóng
-      </button>
-    </div>
-  </div>
-);
-
-
         <button onClick={onClose} className="bg-red-500 text-white px-4 py-2 mt-4 rounded">
           Đóng
         </button>
