@@ -1,0 +1,104 @@
+/* Modal Overlay */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal Content Container */
+.modal-content {
+  background: #fff;
+  padding: 32px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 800px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Form Input Styles */
+.modal-content input,
+.modal-content select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+}
+
+.modal-content input:focus,
+.modal-content select:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+/* Checkbox group styling */
+.flex.items-center.gap-2.mb-4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.flex.items-center.gap-2.mb-4 input[type="checkbox"] {
+  transform: scale(1.2);
+}
+
+/* Button styles */
+.assign-btn {
+  background-color: #3498db;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.assign-btn:hover {
+  background-color: #2980b9;
+}
+
+.bg-red-500 {
+  background-color: #e74c3c;
+}
+
+.bg-red-500:hover {
+  background-color: #c0392b;
+}
+
+/* Variable list */
+.modal-content ul {
+  margin-top: 24px;
+  border-top: 1px solid #eee;
+  padding-top: 16px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.modal-content ul li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #f3f3f3;
+  font-size: 14px;
+}
+
+.unassign-btn {
+  background: none;
+  border: none;
+  color: #e74c3c;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.unassign-btn:hover {
+  color: #c0392b;
+}
