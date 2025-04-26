@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import './PatientFormModal.css';
 
-const PatientFormModal = ({ studyId, siteId, onClose }) => {
+const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
     dob: '',
