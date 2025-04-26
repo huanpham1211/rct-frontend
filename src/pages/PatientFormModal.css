@@ -115,6 +115,38 @@
   margin-top: 16px;
 }
 
+.variable-section {
+  margin-top: 20px;
+}
+
+.variable-section h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.variable-section .floating-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.variable-section label {
+  margin-bottom: 4px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.variable-section select,
+.variable-section input {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  width: 100%;
+}
+
+
 /* Responsive */
 @media (max-width: 600px) {
   .para-input {
