@@ -1,8 +1,8 @@
 // src/pages/PatientForm.js
 import React, { useEffect, useState } from 'react';
 import PatientFormModal from './PatientFormModal';
-import './PatientForm.css';
 import { Link } from 'react-router-dom';
+import './PatientForm.css';
 
 const token = localStorage.getItem('token');
 
@@ -11,30 +11,37 @@ const PatientForm = () => {
   const [selectedStudy, setSelectedStudy] = useState(null);
   const [selectedSite, setSelectedSite] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(true);   // ✨ add loading state
+  const [error, setError] = useState(null);        // ✨ optional error state
 
   useEffect(() => {
-    fetch('https://rct-backend-1erq.onrender.com/api/studies/assigned-studies', {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then(async res => {
+    const fetchStudies = async () => {
+      try {
+        const res = await fetch('https://rct-backend-1erq.onrender.com/api/studies/assigned-studies', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
         if (!res.ok) {
-          const text = await res.text(); // read response as text
-          console.error("Error fetching studies:", text);
-          throw new Error("Failed to fetch assigned studies");
+          const text = await res.text();
+          throw new Error(text);
         }
-        return res.json();
-      })
-      .then(data => setStudies(data))
-      .catch(err => {
+
+        const data = await res.json();
+        setStudies(data);
+      } catch (err) {
         console.error("❌ Fetch error:", err);
-        // optional: redirect to login if unauthorized
+        setError("Không thể tải danh sách nghiên cứu."); 
         if (err.message.includes("401") || err.message.includes("unauthorized")) {
           localStorage.clear();
           window.location.href = '/login';
         }
-      });
-  }, []);
+      } finally {
+        setLoading(false);   // ✅ set loading to false no matter success or fail
+      }
+    };
 
+    fetchStudies();
+  }, []);
 
   const handleStudySelect = (study) => {
     if (study.sites.length === 1) {
@@ -51,38 +58,48 @@ const PatientForm = () => {
     setShowModal(true);
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedStudy(null);
+    setSelectedSite('');
+  };
+
   return (
     <div className="study-card-container">
-    <Link to="/dashboard" className="back-button">← Quay lại Dashboard</Link>
+      <Link to="/dashboard" className="back-button">← Quay lại Dashboard</Link>
 
-      {!selectedStudy && studies.map(study => (
-        <div key={study.id} className="study-card" onClick={() => handleStudySelect(study)}>
-          <h3>{study.name}</h3>
-          <p>{study.description}</p>
-        </div>
-      ))}
-
-      {selectedStudy && selectedStudy.sites.length > 1 && !selectedSite && (
-        <div className="site-selector">
-          <h4>Chọn địa điểm cho nghiên cứu <strong>{selectedStudy.name}</strong></h4>
-          {selectedStudy.sites.map(site => (
-            <button key={site.id} onClick={() => handleSiteSelect(site.id)}>
-              {site.name}
-            </button>
+      {loading ? (
+        <div className="spinner"></div>   // ✨ if loading, show spinner
+      ) : error ? (
+        <div className="error-message">{error}</div>   // ✨ if error, show error
+      ) : (
+        <>
+          {!selectedStudy && studies.length > 0 && studies.map(study => (
+            <div key={study.id} className="study-card" onClick={() => handleStudySelect(study)}>
+              <h3>{study.name}</h3>
+              <p>{study.description}</p>
+            </div>
           ))}
-        </div>
-      )}
 
-      {showModal && (
-        <PatientFormModal
-          studyId={selectedStudy.id}
-          siteId={selectedSite}
-          onClose={() => {
-            setShowModal(false);
-            setSelectedStudy(null);
-            setSelectedSite('');
-          }}
-        />
+          {selectedStudy && selectedStudy.sites.length > 1 && !selectedSite && (
+            <div className="site-selector">
+              <h4>Chọn địa điểm cho nghiên cứu <strong>{selectedStudy.name}</strong></h4>
+              {selectedStudy.sites.map(site => (
+                <button key={site.id} onClick={() => handleSiteSelect(site.id)}>
+                  {site.name}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {showModal && (
+            <PatientFormModal
+              studyId={selectedStudy.id}
+              siteId={selectedSite}
+              onClose={handleCloseModal}
+            />
+          )}
+        </>
       )}
     </div>
   );
