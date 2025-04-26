@@ -21,6 +21,7 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
   const [studyVariables, setStudyVariables] = useState([]);
   const [variableValues, setVariableValues] = useState({});
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -74,6 +75,8 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // 🔥 Start spinner
+  
     const payload = {
       ...formData,
       para: formData.para.join(''),
@@ -84,7 +87,7 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
         value: value,
       })),
     };
-
+  
     try {
       const res = await fetch('https://rct-backend-1erq.onrender.com/api/patients', {
         method: 'POST',
@@ -97,15 +100,36 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
       const result = await res.json();
       if (res.ok) {
         setMessage('✅ Thêm bệnh nhân thành công!');
-        resetForm();
+        setFormData({
+          name: '',
+          dob: '',
+          sex: '',
+          para: [0, 0, 0, 0],
+          phone: '',
+          email: '',
+          ethnicity: '',
+          pregnancy_status: '',
+          notes: '',
+          consent_date: new Date().toISOString().split('T')[0],
+          enrollment_status: '',
+          is_active: true,
+        });
+        setVariableValues({});
+  
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' }); // 🔥 Auto-scroll to top
+        }, 300);
       } else {
         setMessage(`❌ ${result.message || 'Lỗi khi lưu bệnh nhân.'}`);
       }
     } catch (error) {
       console.error('Error submitting form:', error);
       toast.error('❌ Lỗi kết nối server');
+    } finally {
+      setLoading(false); // 🔥 Stop spinner
     }
   };
+
 
   const resetForm = () => {
     setFormData({
@@ -258,6 +282,12 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
                   )}
                 </div>
               ))}
+            </div>
+          )}
+          {loading && (
+            <div className="spinner-container">
+              <div className="spinner"></div>
+              <div className="spinner-text">Đang lưu bệnh nhân...</div>
             </div>
           )}
 
