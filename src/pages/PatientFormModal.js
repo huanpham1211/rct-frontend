@@ -202,9 +202,16 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
           </div>
 
           <div className="floating-group">
-            <input type="date" name="consent_date" placeholder=" " value={formData.consent_date} onChange={handleChange} />
+            <input 
+              type="date" 
+              name="consent_date" 
+              placeholder=" " 
+              value={formData.consent_date} 
+              onChange={handleChange} 
+            />
             <label>Ngày đồng ý tham gia</label>
           </div>
+
 
           <div className="floating-group">
             <select name="enrollment_status" value={formData.enrollment_status} onChange={handleChange}>
