@@ -22,11 +22,14 @@ const StudyVariableModal = ({ studyId, onClose, onSuccess }) => {
       const res = await axios.get(`https://rct-backend-1erq.onrender.com/api/studies/${studyId}/variables`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setVariables(res.data.variables || []);
-    } catch {
+      console.log("📦 fetched variables:", res.data); // ← add this
+      setVariables(res.data || []);
+    } catch (err) {
+      console.error("❌ Error fetching variables:", err);
       toast.error("❌ Lỗi khi tải biến số");
     }
   };
+
 
 
   const handleAdd = async () => {
