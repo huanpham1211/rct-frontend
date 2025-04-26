@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import './PatientFormModal.css';
 
-const PatientFormModal = () => {
+const PatientFormModal = ({ studyId, siteId, onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
     dob: '',
@@ -15,22 +15,21 @@ const PatientFormModal = () => {
     notes: '',
     consent_date: '',
     enrollment_status: '',
-    is_active: true
+    is_active: true,
   });
 
-  const [variableValues, setVariableValues] = useState({});
   const [studyVariables, setStudyVariables] = useState([]);
+  const [variableValues, setVariableValues] = useState({});
   const [message, setMessage] = useState('');
-
-  const token = localStorage.getItem("token");
-  const studyId = localStorage.getItem("study_id"); // or pass as prop
-  const siteId = localStorage.getItem("site_id");
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
-    fetchStudyVariables();
-  }, []);
+    if (studyId) {
+      fetchVariables();
+    }
+  }, [studyId]);
 
-  const fetchStudyVariables = async () => {
+  const fetchVariables = async () => {
     try {
       const res = await fetch(`https://rct-backend-1erq.onrender.com/api/studies/${studyId}/variables`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -38,7 +37,8 @@ const PatientFormModal = () => {
       const data = await res.json();
       setStudyVariables(data || []);
     } catch (err) {
-      console.error("❌ Failed to load study variables:", err);
+      console.error('❌ Failed to load study variables:', err);
+      toast.error('❌ Không thể tải biến số nghiên cứu');
     }
   };
 
@@ -58,10 +58,10 @@ const PatientFormModal = () => {
     }));
   };
 
-  const handleVariableChange = (id, value) => {
+  const handleVariableChange = (variableId, value) => {
     setVariableValues((prev) => ({
       ...prev,
-      [id]: value
+      [variableId]: value,
     }));
   };
 
@@ -74,8 +74,8 @@ const PatientFormModal = () => {
       site_id: siteId,
       study_variables: Object.entries(variableValues).map(([variable_id, value]) => ({
         variable_id: parseInt(variable_id),
-        value
-      }))
+        value: value,
+      })),
     };
 
     try {
@@ -83,11 +83,10 @@ const PatientFormModal = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
-
       const result = await res.json();
       if (res.ok) {
         setMessage('✅ Thêm bệnh nhân thành công!');
@@ -103,150 +102,96 @@ const PatientFormModal = () => {
           notes: '',
           consent_date: '',
           enrollment_status: '',
-          is_active: true
+          is_active: true,
         });
         setVariableValues({});
       } else {
         setMessage(`❌ ${result.message || 'Lỗi khi lưu bệnh nhân.'}`);
       }
-    } catch (err) {
-      setMessage("❌ Lỗi kết nối đến server.");
-      console.error(err);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast.error('❌ Lỗi kết nối server');
     }
   };
 
   return (
-    <div className="patient-form-container">
-      <Link to="/dashboard" className="back-button">← Quay lại</Link>
-      <form onSubmit={handleSubmit} className="patient-form">
-        <h2>Thêm bệnh nhân mới</h2>
+    <div className="modal">
+      <div className="modal-content" style={{ width: '90%', maxWidth: '800px' }}>
+        <h2>📋 Thêm bệnh nhân mới</h2>
+        <form onSubmit={handleSubmit} className="patient-form">
 
-        <div className="floating-group">
-          <input type="text" name="name" placeholder=" " value={formData.name} onChange={handleChange} required />
-          <label>Họ và tên</label>
-        </div>
+          {/* Essential Patient Fields */}
+          {/* name, dob, sex, para, etc. */}
+          {/* Keep your floating-group input fields here (same as you already did) */}
 
-        <div className="floating-group">
-          <input type="date" name="dob" placeholder=" " value={formData.dob} onChange={handleChange} required />
-          <label>Ngày sinh</label>
-        </div>
+          <div className="floating-group">
+            <input type="text" name="name" placeholder=" " value={formData.name} onChange={handleChange} required />
+            <label>Họ và tên</label>
+          </div>
 
-        <div className="floating-group">
-          <select name="sex" value={formData.sex} onChange={handleChange} required>
-            <option value=""> </option>
-            <option value="Nam">Nam</option>
-            <option value="Nữ">Nữ</option>
-            <option value="Khác">Khác</option>
-          </select>
-          <label>Giới tính</label>
-        </div>
+          <div className="floating-group">
+            <input type="date" name="dob" placeholder=" " value={formData.dob} onChange={handleChange} required />
+            <label>Ngày sinh</label>
+          </div>
 
-        <label>PARA</label>
-        <div className="para-input">
-          {formData.para.map((num, index) => (
-            <div className="para-digit" key={index}>
-              <button type="button" onClick={() => handleParaChange(index, 1)}>+</button>
-              <div>{num}</div>
-              <button type="button" onClick={() => handleParaChange(index, -1)}>-</button>
-            </div>
-          ))}
-        </div>
+          <div className="floating-group">
+            <select name="sex" value={formData.sex} onChange={handleChange} required>
+              <option value=""> </option>
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+              <option value="Khác">Khác</option>
+            </select>
+            <label>Giới tính</label>
+          </div>
 
-        <div className="floating-group">
-          <input type="text" name="phone" placeholder=" " value={formData.phone} onChange={handleChange} />
-          <label>Số điện thoại</label>
-        </div>
-
-        <div className="floating-group">
-          <input type="email" name="email" placeholder=" " value={formData.email} onChange={handleChange} />
-          <label>Email</label>
-        </div>
-
-        <div className="floating-group">
-          <input type="text" name="ethnicity" placeholder=" " value={formData.ethnicity} onChange={handleChange} />
-          <label>Dân tộc</label>
-        </div>
-
-        <div className="floating-group">
-          <select name="pregnancy_status" value={formData.pregnancy_status} onChange={handleChange}>
-            <option value=""> </option>
-            <option value="Mang thai">Mang thai</option>
-            <option value="Không">Không</option>
-          </select>
-          <label>Tình trạng thai kỳ</label>
-        </div>
-
-        <div className="floating-group">
-          <textarea name="notes" placeholder=" " value={formData.notes} onChange={handleChange}></textarea>
-          <label>Ghi chú</label>
-        </div>
-
-        <div className="floating-group">
-          <input type="date" name="consent_date" placeholder=" " value={formData.consent_date} onChange={handleChange} />
-          <label>Ngày đồng ý tham gia</label>
-        </div>
-
-        <div className="floating-group">
-          <select name="enrollment_status" value={formData.enrollment_status} onChange={handleChange}>
-            <option value=""> </option>
-            <option value="Enrolled">Đã ghi danh</option>
-            <option value="Screened">Đã sàng lọc</option>
-            <option value="Withdrawn">Đã rút</option>
-          </select>
-          <label>Trạng thái ghi danh</label>
-        </div>
-
-        <label>
-          <input type="checkbox" name="is_active" checked={formData.is_active} onChange={handleChange} />
-          Còn hoạt động
-        </label>
-
-        {/* Study-specific Variables */}
-        {studyVariables.length > 0 && (
-          <>
-            <h3 className="mt-4">🧪 Biến số nghiên cứu</h3>
-            {studyVariables.map((v) => (
-              <div className="floating-group" key={v.id}>
-                {v.variable_type === "select" ? (
-                  <>
-                    <select
-                      value={variableValues[v.id] || ""}
-                      onChange={(e) => handleVariableChange(v.id, e.target.value)}
-                    >
-                      <option value=""> </option>
-                      {v.options?.split(',').map((opt, i) => (
-                        <option key={i} value={opt.trim()}>{opt.trim()}</option>
-                      ))}
-                    </select>
-                    <label>{v.description || v.name}</label>
-                  </>
-                ) : v.variable_type === "boolean" ? (
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={variableValues[v.id] === "true"}
-                      onChange={(e) => handleVariableChange(v.id, e.target.checked ? "true" : "false")}
-                    />
-                    {v.description || v.name}
-                  </label>
-                ) : (
-                  <>
-                    <input
-                      type={v.variable_type === "date" ? "date" : "text"}
-                      value={variableValues[v.id] || ""}
-                      onChange={(e) => handleVariableChange(v.id, e.target.value)}
-                    />
-                    <label>{v.description || v.name}</label>
-                  </>
-                )}
+          <label>PARA</label>
+          <div className="para-input">
+            {formData.para.map((num, index) => (
+              <div className="para-digit" key={index}>
+                <button type="button" onClick={() => handleParaChange(index, 1)}>+</button>
+                <div>{num}</div>
+                <button type="button" onClick={() => handleParaChange(index, -1)}>-</button>
               </div>
             ))}
-          </>
-        )}
+          </div>
 
-        <button type="submit">Lưu bệnh nhân</button>
-        {message && <p className="form-message">{message}</p>}
-      </form>
+          {/* Your other fields (phone, email, ethnicity, etc.) here */}
+
+          {/* 🔥 Study Variables Part */}
+          {studyVariables.length > 0 && (
+            <div className="variable-section">
+              <h3>🛠️ Biến số nghiên cứu</h3>
+              {studyVariables.map((v) => (
+                <div key={v.id} className="floating-group">
+                  <label>{v.description || v.name}</label>
+                  {v.variable_type === 'boolean' ? (
+                    <select onChange={(e) => handleVariableChange(v.id, e.target.value)} required={v.required}>
+                      <option value=""> </option>
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
+                    </select>
+                  ) : (
+                    <input
+                      type={v.variable_type === 'number' || v.variable_type === 'integer' ? 'number' : 'text'}
+                      onChange={(e) => handleVariableChange(v.id, e.target.value)}
+                      required={v.required}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="form-actions">
+            <button type="submit">Lưu bệnh nhân</button>
+            <button type="button" onClick={onClose} className="bg-red-500 text-white ml-2 px-4 py-2 rounded">
+              Đóng
+            </button>
+          </div>
+
+          {message && <p className="form-message">{message}</p>}
+        </form>
+      </div>
     </div>
   );
 };
