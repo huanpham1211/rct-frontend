@@ -67,9 +67,14 @@ const StudyVariableModal = ({ studyId, onClose, onSuccess }) => {
 
         <div className="space-y-2 mb-4">
           <input
-            placeholder="Tên biến (VD: Tăng huyết áp)"
+            placeholder="Tên biến (VD: tang_huyet_ap)"
             value={newVar.name}
             onChange={(e) => setNewVar({ ...newVar, name: e.target.value })}
+          />
+          <input
+            placeholder="Mô tả biến (VD: Tăng huyết áp)"
+            value={newVar.description}
+            onChange={(e) => setNewVar({ ...newVar, description: e.target.value })}
           />
           <select
             value={newVar.variable_type}
@@ -106,8 +111,8 @@ const StudyVariableModal = ({ studyId, onClose, onSuccess }) => {
         <ul>
           {variables.map(v => (
             <li key={v.id} className="mb-2">
-              <div><strong>{v.description || v.name}</strong> <span className="text-gray-600">({v.name})</span></div> {/* ✅ Show description if available */}
-              <span className="ml-2 text-gray-600 text-sm">({v.name})</span> {/* optional: show internal name */}
+              <div><strong>{v.name}</strong> <span className="text-gray-600">({v.name})</span></div> {/* ✅ Show description if available */}
+              <span className="ml-2 text-gray-600 text-sm">({v.description})</span> {/* optional: show internal name */}
               <span className="ml-2">📄 {v.variable_type}</span>
               {v.required && <span className="ml-2 text-red-600">⭐ Bắt buộc</span>}
               {v.options && <span> – Tuỳ chọn: {v.options}</span>}
