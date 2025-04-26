@@ -29,6 +29,15 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
     }
   }, [studyId]);
   
+  useEffect(() => {
+  const today = new Date();
+  const formatted = today.toISOString().split('T')[0]; // yyyy-MM-dd format
+  setFormData(prev => ({
+    ...prev,
+    consent_date: formatted
+  }));
+}, []);
+
   const formatDateForDisplay = (dateString) => {
     if (!dateString) return '';
     const [year, month, day] = dateString.split('-');
@@ -211,65 +220,48 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
           {studyVariables.length > 0 && (
             <div className="variable-section">
               <h3>🛠️ Biến số nghiên cứu</h3>
-              {studyVariables.map((v) => (
-                <div key={v.id} className="floating-group">
-                  {v.variable_type === 'boolean' ? (
-                    <>
-                      <label>{v.description || v.name}</label>
-                      <select
-                        onChange={(e) => handleVariableChange(v.id, e.target.value)}
-                        required={v.required}
-                      >
-                        <option value=""> </option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                      </select>
-                    </>
-                  ) : v.variable_type === 'multiselect' ? (
-                    <>
-                      <label>{v.description || v.name}</label>
-                      <select
-                        multiple
-                        onChange={(e) => {
-                          const selected = Array.from(e.target.selectedOptions).map(opt => opt.value);
-                          handleVariableChange(v.id, selected.join(','));
-                        }}
-                        required={v.required}
-                      >
-                        {(v.options || "").split(",").map((option, idx) => (
-                          <option key={idx} value={option.trim()}>
-                            {option.trim()}
-                          </option>
-                        ))}
-                      </select>
-                    </>
-                  ) : v.variable_type === 'select' ? (
-                    <>
-                      <label>{v.description || v.name}</label>
-                      <select
-                        onChange={(e) => handleVariableChange(v.id, e.target.value)}
-                        required={v.required}
-                      >
-                        <option value=""> </option>
-                        {(v.options || "").split(",").map((option, idx) => (
-                          <option key={idx} value={option.trim()}>
-                            {option.trim()}
-                          </option>
-                        ))}
-                      </select>
-                    </>
-                  ) : (
-                    <>
-                      <input
-                        type={v.variable_type === 'number' || v.variable_type === 'integer' ? 'number' : 'text'}
-                        placeholder={v.description || v.name}
-                        onChange={(e) => handleVariableChange(v.id, e.target.value)}
-                        required={v.required}
-                      />
-                    </>
-                  )}
-                </div>
-              ))}
+            {studyVariables.map((v) => (
+              <div key={v.id} className="floating-group variable-field">
+                <label htmlFor={`variable-${v.id}`} className="variable-label">{v.description || v.name}</label>
+            
+                {v.variable_type === 'boolean' ? (
+                  <select
+                    id={`variable-${v.id}`}
+                    value={variableValues[v.id] || ""}
+                    onChange={(e) => handleVariableChange(v.id, e.target.value)}
+                    required={v.required}
+                  >
+                    <option value="">Chọn</option>
+                    <option value="Yes">Có</option>
+                    <option value="No">Không</option>
+                  </select>
+                ) : v.variable_type === 'multiselect' ? (
+                  <select
+                    id={`variable-${v.id}`}
+                    multiple
+                    value={variableValues[v.id] || []}
+                    onChange={(e) => {
+                      const selectedOptions = Array.from(e.target.selectedOptions, (option) => option.value);
+                      handleVariableChange(v.id, selectedOptions);
+                    }}
+                    required={v.required}
+                  >
+                    {v.options.split(',').map((opt, idx) => (
+                      <option key={idx} value={opt.trim()}>{opt.trim()}</option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    id={`variable-${v.id}`}
+                    type={v.variable_type === 'number' || v.variable_type === 'integer' ? 'number' : 'text'}
+                    value={variableValues[v.id] || ""}
+                    onChange={(e) => handleVariableChange(v.id, e.target.value)}
+                    required={v.required}
+                  />
+                )}
+              </div>
+            ))}
+
             </div>
           )}
 
