@@ -36,7 +36,7 @@ const StudyVariableModal = ({ studyId, onClose, onSuccess }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("✅ Đã thêm biến mới");
-      setNewVar({ name: "", variable_type: "text", required: false, options: "" });
+      setNewVar({ name: "", description: "", variable_type: "text", required: false, options: "" });
       fetchVariables();
       onSuccess?.();
     } catch {
@@ -64,7 +64,7 @@ const StudyVariableModal = ({ studyId, onClose, onSuccess }) => {
 
         <div className="space-y-2 mb-4">
           <input
-            placeholder="Tên biến (VD: Huyết áp)"
+            placeholder="Tên biến (VD: Tăng huyết áp)"
             value={newVar.name}
             onChange={(e) => setNewVar({ ...newVar, name: e.target.value })}
           />
@@ -102,14 +102,16 @@ const StudyVariableModal = ({ studyId, onClose, onSuccess }) => {
 
         <ul>
           {variables.map(v => (
-            <li key={v.id}>
-              <strong>{v.name}</strong> ({v.variable_type}) {v.required ? "⭐" : ""} 
+            <li key={v.id} className="mb-2">
+              <div><strong>{v.description || v.name}</strong> <span className="text-gray-600">({v.name})</span></div> {/* ✅ Show description if available */}
+              <span className="ml-2 text-gray-600 text-sm">({v.name})</span> {/* optional: show internal name */}
+              <span className="ml-2">📄 {v.variable_type}</span>
+              {v.required && <span className="ml-2 text-red-600">⭐ Bắt buộc</span>}
               {v.options && <span> – Tuỳ chọn: {v.options}</span>}
               <button className="unassign-btn ml-2" onClick={() => handleDelete(v.id)}>❌</button>
             </li>
           ))}
         </ul>
-
         <button onClick={onClose} className="bg-red-500 text-white px-4 py-2 mt-4 rounded">Đóng</button>
       </div>
     </div>
