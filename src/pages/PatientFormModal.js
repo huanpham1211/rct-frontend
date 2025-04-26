@@ -210,10 +210,46 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
                   {v.variable_type === 'boolean' ? (
                     <>
                       <label>{v.description || v.name}</label>
-                      <select onChange={(e) => handleVariableChange(v.id, e.target.value)} required={v.required}>
+                      <select
+                        onChange={(e) => handleVariableChange(v.id, e.target.value)}
+                        required={v.required}
+                      >
                         <option value=""> </option>
                         <option value="Yes">Yes</option>
                         <option value="No">No</option>
+                      </select>
+                    </>
+                  ) : v.variable_type === 'multiselect' ? (
+                    <>
+                      <label>{v.description || v.name}</label>
+                      <select
+                        multiple
+                        onChange={(e) => {
+                          const selected = Array.from(e.target.selectedOptions).map(opt => opt.value);
+                          handleVariableChange(v.id, selected.join(','));
+                        }}
+                        required={v.required}
+                      >
+                        {(v.options || "").split(",").map((option, idx) => (
+                          <option key={idx} value={option.trim()}>
+                            {option.trim()}
+                          </option>
+                        ))}
+                      </select>
+                    </>
+                  ) : v.variable_type === 'select' ? (
+                    <>
+                      <label>{v.description || v.name}</label>
+                      <select
+                        onChange={(e) => handleVariableChange(v.id, e.target.value)}
+                        required={v.required}
+                      >
+                        <option value=""> </option>
+                        {(v.options || "").split(",").map((option, idx) => (
+                          <option key={idx} value={option.trim()}>
+                            {option.trim()}
+                          </option>
+                        ))}
                       </select>
                     </>
                   ) : (
@@ -224,7 +260,6 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
                         onChange={(e) => handleVariableChange(v.id, e.target.value)}
                         required={v.required}
                       />
-                      {/* No overlapping label now */}
                     </>
                   )}
                 </div>
