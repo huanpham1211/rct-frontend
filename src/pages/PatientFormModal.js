@@ -28,6 +28,12 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
       fetchVariables();
     }
   }, [studyId]);
+  
+  const formatDateForDisplay = (dateString) => {
+    if (!dateString) return '';
+    const [year, month, day] = dateString.split('-');
+    return `${day}/${month}/${year}`;
+  };
 
   const fetchVariables = async () => {
     try {
@@ -187,7 +193,7 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
           </div>
 
           <div className="floating-group">
-            <input type="date" name="consent_date" placeholder=" " value={formData.consent_date} onChange={handleChange} />
+            <input type="date" name="consent_date" placeholder=" " value={formatDateForDisplay(formData.consent_date)} onChange={handleChange} />
             <label>Ngày đồng ý tham gia</label>
           </div>
 
