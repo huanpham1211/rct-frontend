@@ -25,17 +25,18 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
   const token = localStorage.getItem('token');
 
   useEffect(() => {
-    const today = new Date();
-    const formatted = today.toISOString().split('T')[0]; // yyyy-MM-dd
-    setFormData((prev) => ({
-      ...prev,
-      consent_date: formatted,
-    }));
-
     if (studyId) {
       fetchVariables();
     }
-  }, [studyId]);
+    if (patientId) {
+      fetchPatient();
+    } else {
+      // For new patient, default consent_date = today
+      const today = new Date();
+      const formatted = today.toISOString().split('T')[0];
+      setFormData(prev => ({ ...prev, consent_date: formatted }));
+    }
+  }, [studyId, patientId]);
 
   const fetchVariables = async () => {
     try {
@@ -49,7 +50,54 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
       toast.error('❌ Không thể tải biến số nghiên cứu');
     }
   };
-
+  const fetchPatient = async () => {
+      try {
+        const res = await fetch(`https://rct-backend-1erq.onrender.com/api/patients/${patientId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+  
+        if (res.ok) {
+          const p = data.patient;
+          const v = data.variables;
+  
+          setFormData({
+            ...formData,
+            name: p.name || '',
+            dob: p.dob || '',
+            sex: p.sex || '',
+            para: p.para ? p.para.split('').map(Number) : [0,0,0,0],
+            phone: p.phone || '',
+            email: p.email || '',
+            ethnicity: p.ethnicity || '',
+            pregnancy_status: p.pregnancy_status || '',
+            notes: p.notes || '',
+            consent_date: p.consent_date || '',
+            enrollment_status: p.enrollment_status || '',
+            is_active: p.is_active ?? true,
+          });
+  
+          const varValues = {};
+          v.forEach(item => {
+            if (item.type === "multiselect") {
+              if (!varValues[item.variable_id]) varValues[item.variable_id] = [];
+              varValues[item.variable_id].push(item.value);
+            } else {
+              varValues[item.variable_id] = item.value;
+            }
+          });
+          setVariableValues(varValues);
+  
+        } else {
+          toast.error('❌ Không thể tải thông tin bệnh nhân');
+        }
+  
+      } catch (err) {
+        console.error('❌ Failed to load patient:', err);
+        toast.error('❌ Lỗi khi tải bệnh nhân');
+      }
+    };
+  
   const handleParaChange = (index, delta) => {
     setFormData((prev) => {
       const newPara = [...prev.para];
@@ -89,8 +137,13 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
     };
   
     try {
-      const res = await fetch('https://rct-backend-1erq.onrender.com/api/patients', {
-        method: 'POST',
+      const url = patientId
+        ? `https://rct-backend-1erq.onrender.com/api/patients/${patientId}`
+        : 'https://rct-backend-1erq.onrender.com/api/patients';
+      const method = patientId ? 'PUT' : 'POST';
+
+      const res = await fetch(url, {
+        method: method,
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
