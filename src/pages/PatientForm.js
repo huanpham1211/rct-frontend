@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import PatientFormModal from './PatientFormModal';
 import './PatientForm.css';
+import { Link } from 'react-router-dom';
 
 const token = localStorage.getItem('token');
 
@@ -52,6 +53,8 @@ const PatientForm = () => {
 
   return (
     <div className="study-card-container">
+    <Link to="/dashboard" className="back-button">← Quay lại Dashboard</Link>
+
       {!selectedStudy && studies.map(study => (
         <div key={study.id} className="study-card" onClick={() => handleStudySelect(study)}>
           <h3>{study.name}</h3>
