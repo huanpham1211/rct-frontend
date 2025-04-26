@@ -155,8 +155,6 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
             </select>
             <label>Giới tính</label>
           </div>
-
-          {/* Show PARA only if female */}
           {formData.sex === 'Nữ' && (
             <>
               <label>PARA</label>
