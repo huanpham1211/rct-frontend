@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; 
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './PatientFormModal.css';
 
 const PatientFormModal = () => {
@@ -18,7 +18,29 @@ const PatientFormModal = () => {
     is_active: true
   });
 
+  const [variableValues, setVariableValues] = useState({});
+  const [studyVariables, setStudyVariables] = useState([]);
   const [message, setMessage] = useState('');
+
+  const token = localStorage.getItem("token");
+  const studyId = localStorage.getItem("study_id"); // or pass as prop
+  const siteId = localStorage.getItem("site_id");
+
+  useEffect(() => {
+    fetchStudyVariables();
+  }, []);
+
+  const fetchStudyVariables = async () => {
+    try {
+      const res = await fetch(`https://rct-backend-1erq.onrender.com/api/studies/${studyId}/variables`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      setStudyVariables(data || []);
+    } catch (err) {
+      console.error("❌ Failed to load study variables:", err);
+    }
+  };
 
   const handleParaChange = (index, delta) => {
     setFormData((prev) => {
@@ -36,41 +58,60 @@ const PatientFormModal = () => {
     }));
   };
 
+  const handleVariableChange = (id, value) => {
+    setVariableValues((prev) => ({
+      ...prev,
+      [id]: value
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = {
       ...formData,
       para: formData.para.join(''),
+      study_id: studyId,
+      site_id: siteId,
+      study_variables: Object.entries(variableValues).map(([variable_id, value]) => ({
+        variable_id: parseInt(variable_id),
+        value
+      }))
     };
 
-    const res = await fetch('https://rct-backend-1erq.onrender.com/api/patients', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem("token")}`
-      },
-      body: JSON.stringify(payload),
-    });
-
-    const result = await res.json();
-    if (res.ok) {
-      setMessage('✅ Thêm bệnh nhân thành công!');
-      setFormData({
-        name: '',
-        dob: '',
-        sex: '',
-        para: [0, 0, 0, 0],
-        phone: '',
-        email: '',
-        ethnicity: '',
-        pregnancy_status: '',
-        notes: '',
-        consent_date: '',
-        enrollment_status: '',
-        is_active: true
+    try {
+      const res = await fetch('https://rct-backend-1erq.onrender.com/api/patients', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
       });
-    } else {
-      setMessage(`❌ ${result.message || 'Lỗi khi lưu bệnh nhân.'}`);
+
+      const result = await res.json();
+      if (res.ok) {
+        setMessage('✅ Thêm bệnh nhân thành công!');
+        setFormData({
+          name: '',
+          dob: '',
+          sex: '',
+          para: [0, 0, 0, 0],
+          phone: '',
+          email: '',
+          ethnicity: '',
+          pregnancy_status: '',
+          notes: '',
+          consent_date: '',
+          enrollment_status: '',
+          is_active: true
+        });
+        setVariableValues({});
+      } else {
+        setMessage(`❌ ${result.message || 'Lỗi khi lưu bệnh nhân.'}`);
+      }
+    } catch (err) {
+      setMessage("❌ Lỗi kết nối đến server.");
+      console.error(err);
     }
   };
 
@@ -112,8 +153,8 @@ const PatientFormModal = () => {
         </div>
 
         <div className="floating-group">
-          <input type="text" name="phone" placeholder=" " value={formData.phone} onChange={handleChange} pattern="\\d{4} \\d{3} \\d{3}" />
-          <label>Số điện thoại (0000 000 000)</label>
+          <input type="text" name="phone" placeholder=" " value={formData.phone} onChange={handleChange} />
+          <label>Số điện thoại</label>
         </div>
 
         <div className="floating-group">
@@ -159,6 +200,49 @@ const PatientFormModal = () => {
           <input type="checkbox" name="is_active" checked={formData.is_active} onChange={handleChange} />
           Còn hoạt động
         </label>
+
+        {/* Study-specific Variables */}
+        {studyVariables.length > 0 && (
+          <>
+            <h3 className="mt-4">🧪 Biến số nghiên cứu</h3>
+            {studyVariables.map((v) => (
+              <div className="floating-group" key={v.id}>
+                {v.variable_type === "select" ? (
+                  <>
+                    <select
+                      value={variableValues[v.id] || ""}
+                      onChange={(e) => handleVariableChange(v.id, e.target.value)}
+                    >
+                      <option value=""> </option>
+                      {v.options?.split(',').map((opt, i) => (
+                        <option key={i} value={opt.trim()}>{opt.trim()}</option>
+                      ))}
+                    </select>
+                    <label>{v.description || v.name}</label>
+                  </>
+                ) : v.variable_type === "boolean" ? (
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={variableValues[v.id] === "true"}
+                      onChange={(e) => handleVariableChange(v.id, e.target.checked ? "true" : "false")}
+                    />
+                    {v.description || v.name}
+                  </label>
+                ) : (
+                  <>
+                    <input
+                      type={v.variable_type === "date" ? "date" : "text"}
+                      value={variableValues[v.id] || ""}
+                      onChange={(e) => handleVariableChange(v.id, e.target.value)}
+                    />
+                    <label>{v.description || v.name}</label>
+                  </>
+                )}
+              </div>
+            ))}
+          </>
+        )}
 
         <button type="submit">Lưu bệnh nhân</button>
         {message && <p className="form-message">{message}</p>}
