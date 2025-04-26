@@ -202,7 +202,7 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
           </div>
 
           <div className="floating-group">
-            <input type="date" name="consent_date" placeholder=" " value={formatDateForDisplay(formData.consent_date)} onChange={handleChange} />
+            <input type="date" name="consent_date" placeholder=" " value={formData.consent_date} onChange={handleChange} />
             <label>Ngày đồng ý tham gia</label>
           </div>
 
@@ -218,6 +218,7 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
 
           {/* Study Variables Section */}
           {studyVariables.length > 0 && (
+            <hr style={{ margin: "20px 0" }} />
             <div className="variable-section">
               <h3>🛠️ Biến số nghiên cứu</h3>
             {studyVariables.map((v) => (
