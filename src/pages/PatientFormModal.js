@@ -292,7 +292,9 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
           )}
 
           <div className="form-actions">
-            <button type="submit">Lưu bệnh nhân</button>
+            <button type="submit" disabled={loading}>
+              {loading ? 'Đang lưu...' : 'Lưu bệnh nhân'}
+            </button>
             <button type="button" onClick={onClose} className="bg-red-500 text-white ml-2 px-4 py-2 rounded">
               Đóng
             </button>
