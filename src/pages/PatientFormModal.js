@@ -13,7 +13,7 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
     ethnicity: '',
     pregnancy_status: '',
     notes: '',
-    consent_date: '',
+    consent_date: new Date().toISOString().split('T')[0], // 🔥 Default to today
     enrollment_status: '',
     is_active: true,
   });
@@ -100,7 +100,7 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
           ethnicity: '',
           pregnancy_status: '',
           notes: '',
-          consent_date: '',
+          consent_date: new Date().toISOString().split('T')[0],
           enrollment_status: '',
           is_active: true,
         });
@@ -121,9 +121,6 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
         <form onSubmit={handleSubmit} className="patient-form">
 
           {/* Essential Patient Fields */}
-          {/* name, dob, sex, para, etc. */}
-          {/* Keep your floating-group input fields here (same as you already did) */}
-
           <div className="floating-group">
             <input type="text" name="name" placeholder=" " value={formData.name} onChange={handleChange} required />
             <label>Họ và tên</label>
@@ -144,38 +141,91 @@ const PatientFormModal = ({ studyId, siteId, onClose }) => {
             <label>Giới tính</label>
           </div>
 
-          <label>PARA</label>
-          <div className="para-input">
-            {formData.para.map((num, index) => (
-              <div className="para-digit" key={index}>
-                <button type="button" onClick={() => handleParaChange(index, 1)}>+</button>
-                <div>{num}</div>
-                <button type="button" onClick={() => handleParaChange(index, -1)}>-</button>
+          {/* Show PARA only if female */}
+          {formData.sex === 'Nữ' && (
+            <>
+              <label>PARA</label>
+              <div className="para-input">
+                {formData.para.map((num, index) => (
+                  <div className="para-digit" key={index}>
+                    <button type="button" onClick={() => handleParaChange(index, 1)}>+</button>
+                    <div>{num}</div>
+                    <button type="button" onClick={() => handleParaChange(index, -1)}>-</button>
+                  </div>
+                ))}
               </div>
-            ))}
+            </>
+          )}
+
+          <div className="floating-group">
+            <input type="text" name="phone" placeholder=" " value={formData.phone} onChange={handleChange} />
+            <label>Điện thoại</label>
           </div>
 
-          {/* Your other fields (phone, email, ethnicity, etc.) here */}
+          <div className="floating-group">
+            <input type="email" name="email" placeholder=" " value={formData.email} onChange={handleChange} />
+            <label>Email</label>
+          </div>
 
-          {/* 🔥 Study Variables Part */}
+          <div className="floating-group">
+            <input type="text" name="ethnicity" placeholder=" " value={formData.ethnicity} onChange={handleChange} />
+            <label>Dân tộc</label>
+          </div>
+
+          <div className="floating-group">
+            <select name="pregnancy_status" value={formData.pregnancy_status} onChange={handleChange}>
+              <option value=""> </option>
+              <option value="Mang thai">Mang thai</option>
+              <option value="Không">Không</option>
+            </select>
+            <label>Tình trạng thai kỳ</label>
+          </div>
+
+          <div className="floating-group">
+            <textarea name="notes" placeholder=" " value={formData.notes} onChange={handleChange}></textarea>
+            <label>Ghi chú</label>
+          </div>
+
+          <div className="floating-group">
+            <input type="date" name="consent_date" placeholder=" " value={formData.consent_date} onChange={handleChange} />
+            <label>Ngày đồng ý tham gia</label>
+          </div>
+
+          <div className="floating-group">
+            <select name="enrollment_status" value={formData.enrollment_status} onChange={handleChange}>
+              <option value=""> </option>
+              <option value="Enrolled">Đã ghi danh</option>
+              <option value="Screened">Đã sàng lọc</option>
+              <option value="Withdrawn">Đã rút</option>
+            </select>
+            <label>Trạng thái ghi danh</label>
+          </div>
+
+          {/* Study Variables Section */}
           {studyVariables.length > 0 && (
             <div className="variable-section">
               <h3>🛠️ Biến số nghiên cứu</h3>
               {studyVariables.map((v) => (
                 <div key={v.id} className="floating-group">
-                  <label>{v.description || v.name}</label>
                   {v.variable_type === 'boolean' ? (
-                    <select onChange={(e) => handleVariableChange(v.id, e.target.value)} required={v.required}>
-                      <option value=""> </option>
-                      <option value="Yes">Yes</option>
-                      <option value="No">No</option>
-                    </select>
+                    <>
+                      <label>{v.description || v.name}</label>
+                      <select onChange={(e) => handleVariableChange(v.id, e.target.value)} required={v.required}>
+                        <option value=""> </option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                      </select>
+                    </>
                   ) : (
-                    <input
-                      type={v.variable_type === 'number' || v.variable_type === 'integer' ? 'number' : 'text'}
-                      onChange={(e) => handleVariableChange(v.id, e.target.value)}
-                      required={v.required}
-                    />
+                    <>
+                      <input
+                        type={v.variable_type === 'number' || v.variable_type === 'integer' ? 'number' : 'text'}
+                        placeholder={v.description || v.name}
+                        onChange={(e) => handleVariableChange(v.id, e.target.value)}
+                        required={v.required}
+                      />
+                      {/* No overlapping label now */}
+                    </>
                   )}
                 </div>
               ))}
