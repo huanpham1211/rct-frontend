@@ -1,0 +1,29 @@
+.checkbox-group-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: 8px;
+}
+
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  user-select: none;
+}
+
+.checkbox-option input[type="checkbox"] {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.checkbox-option:hover {
+  color: #0366d6;
+}
+
+.checkbox-option.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
