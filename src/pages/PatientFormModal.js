@@ -311,6 +311,7 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
                       <option value="No">Không</option>
                     </select>
                   ) : v.variable_type === 'multiselect' ? (
+                    <>
                     {v.options?.split(',').map((opt, idx) => {
                       const val = opt.trim();
                       const selected = variableValues[v.id] || [];
@@ -335,7 +336,7 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
                         </label>
                       );
                     })}
-
+                      </>
                   ) : (
                     <input
                       id={`variable-${v.id}`}
