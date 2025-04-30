@@ -132,8 +132,9 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
       site_id: siteId,
       study_variables: Object.entries(variableValues).map(([variable_id, value]) => ({
         variable_id: parseInt(variable_id),
-        value: value,
-      })),
+        value: Array.isArray(value) ? value.join(',') : value,  // ✅ fix
+  }))
+,
     };
   
     try {
@@ -310,20 +311,31 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
                       <option value="No">Không</option>
                     </select>
                   ) : v.variable_type === 'multiselect' ? (
-                    <select
-                      id={`variable-${v.id}`}
-                      multiple
-                      value={variableValues[v.id] || []}
-                      onChange={(e) => {
-                        const selected = Array.from(e.target.selectedOptions, (o) => o.value);
-                        handleVariableChange(v.id, selected);
-                      }}
-                      required={v.required}
-                    >
-                      {v.options?.split(',').map((opt, idx) => (
-                        <option key={idx} value={opt.trim()}>{opt.trim()}</option>
-                      ))}
-                    </select>
+                    {v.options?.split(',').map((opt, idx) => {
+                      const val = opt.trim();
+                      const selected = variableValues[v.id] || [];
+                      return (
+                        <label key={idx} style={{ display: 'block' }}>
+                          <input
+                            type="checkbox"
+                            value={val}
+                            checked={selected.includes(val)}
+                            onChange={(e) => {
+                              const checked = e.target.checked;
+                              let updated = [...selected];
+                              if (checked) {
+                                updated.push(val);
+                              } else {
+                                updated = updated.filter((v) => v !== val);
+                              }
+                              handleVariableChange(v.id, updated);
+                            }}
+                          />
+                          {val}
+                        </label>
+                      );
+                    })}
+
                   ) : (
                     <input
                       id={`variable-${v.id}`}
