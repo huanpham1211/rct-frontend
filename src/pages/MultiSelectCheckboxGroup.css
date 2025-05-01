@@ -8,15 +8,16 @@
 .checkbox-option {
   display: flex;
   align-items: center;
-  gap: 6px;
-  cursor: pointer;
+  gap: 8px;
   font-size: 14px;
-  user-select: none;
+  line-height: 1.4;
+  word-break: break-word;
+  white-space: normal;
 }
 
 .checkbox-option input[type="checkbox"] {
   transform: scale(1.2);
-  cursor: pointer;
+  margin-right: 6px;
 }
 
 .checkbox-option:hover {
@@ -31,5 +32,12 @@
 .error-text {
   color: red;
   font-size: 13px;
+  margin-top: 4px;
+}
+
+.multiselect-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   margin-top: 4px;
 }
