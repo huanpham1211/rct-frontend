@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import './PatientFormModal.css';
+import MultiSelectCheckboxGroup from './MultiSelectCheckboxGroup';
 
 const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
   const [formData, setFormData] = useState({
@@ -23,6 +24,17 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem('token');
+  const isValidPhone = (phone) => /^\d{10}$/.test(phone);
+  const isValidEmail = (email) => !email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const formatDateDisplay = (isoDate) => {
+    if (!isoDate) return '';
+    const [year, month, day] = isoDate.split('T')[0].split('-');
+    return `${day}/${month}/${year}`;
+  };
+  const formatDateToISO = (ddmmyyyy) => {
+    const [day, month, year] = ddmmyyyy.split('/');
+    return `${year}-${month}-${day}`;
+  };
 
   useEffect(() => {
     if (studyId) {
@@ -216,7 +228,14 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
           </div>
 
           <div className="floating-group">
-            <input type="date" name="dob" placeholder=" " value={formData.dob} onChange={handleChange} required />
+            <input
+              type="date"
+              name="dob"
+              placeholder=" "
+              value={formData.dob}
+              onChange={(e) => handleChange(e)}
+              required
+            />
             <label>Ngày sinh</label>
           </div>
 
@@ -248,12 +267,29 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
 
           {/* Other Fields */}
           <div className="floating-group">
-            <input type="text" name="phone" placeholder=" " value={formData.phone} onChange={handleChange} />
-            <label>Điện thoại</label>
+            <input
+              type="tel"
+              name="phone"
+              placeholder=" "
+              value={formData.phone}
+              onChange={handleChange}
+              required
+              pattern="\d{10}"
+              title="Số điện thoại phải gồm 10 chữ số"
+            />
+            <label>Điện thoại *</label>
           </div>
-
+                
           <div className="floating-group">
-            <input type="email" name="email" placeholder=" " value={formData.email} onChange={handleChange} />
+            <input
+              type="email"
+              name="email"
+              placeholder=" "
+              value={formData.email}
+              onChange={handleChange}
+              pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
+              title="Địa chỉ email không hợp lệ"
+            />
             <label>Email</label>
           </div>
 
@@ -277,7 +313,14 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
           </div>
 
           <div className="floating-group">
-            <input type="date" name="consent_date" placeholder=" " value={formData.consent_date} onChange={handleChange} />
+            <input
+              type="date"
+              name="consent_date"
+              placeholder=" "
+              value={formData.consent_date}
+              onChange={handleChange}
+              required
+            />
             <label>Ngày đồng ý tham gia</label>
           </div>
 
@@ -311,32 +354,13 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
                       <option value="No">Không</option>
                     </select>
                   ) : v.variable_type === 'multiselect' ? (
-                    <>
-                    {v.options?.split(',').map((opt, idx) => {
-                      const val = opt.trim();
-                      const selected = variableValues[v.id] || [];
-                      return (
-                        <label key={idx} style={{ display: 'block' }}>
-                          <input
-                            type="checkbox"
-                            value={val}
-                            checked={selected.includes(val)}
-                            onChange={(e) => {
-                              const checked = e.target.checked;
-                              let updated = [...selected];
-                              if (checked) {
-                                updated.push(val);
-                              } else {
-                                updated = updated.filter((v) => v !== val);
-                              }
-                              handleVariableChange(v.id, updated);
-                            }}
-                          />
-                          {val}
-                        </label>
-                      );
-                    })}
-                      </>
+                    
+                  <MultiSelectCheckboxGroup
+                    options={v.options?.split(',') || []}
+                    selectedValues={variableValues[v.id] || []}
+                    onChange={(vals) => handleVariableChange(v.id, vals)}
+                    required={v.required}
+                  />      
                   ) : (
                     <input
                       id={`variable-${v.id}`}
