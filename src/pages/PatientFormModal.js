@@ -341,7 +341,7 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
               {studyVariables.map((v) => (
                 <div key={v.id} className="floating-group variable-field">
                   <label htmlFor={`variable-${v.id}`} className="variable-label">{v.description || v.name}</label>
-
+              
                   {v.variable_type === 'boolean' ? (
                     <select
                       id={`variable-${v.id}`}
@@ -354,13 +354,12 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
                       <option value="No">Không</option>
                     </select>
                   ) : v.variable_type === 'multiselect' ? (
-                    
-                  <MultiSelectCheckboxGroup
-                    options={v.options?.split(',') || []}
-                    selectedValues={variableValues[v.id] || []}
-                    onChange={(vals) => handleVariableChange(v.id, vals)}
-                    required={v.required}
-                  />      
+                    <MultiSelectCheckboxGroup
+                      options={v.options?.split(',') || []}
+                      selectedValues={variableValues[v.id] || []}
+                      onChange={(vals) => handleVariableChange(v.id, vals)}
+                      required={v.required}
+                    />
                   ) : (
                     <input
                       id={`variable-${v.id}`}
@@ -372,7 +371,7 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
                   )}
                 </div>
               ))}
-            </div>
+                    </div>
           )}
           {loading && (
             <div className="spinner-container">
