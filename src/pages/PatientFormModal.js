@@ -323,7 +323,6 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
             />
             <label>Ngày đồng ý tham gia</label>
           </div>
-
           <div className="floating-group">
             <select name="enrollment_status" value={formData.enrollment_status} onChange={handleChange}>
               <option value=""> </option>
@@ -336,43 +335,50 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
 
           {/* Study Variables */}
           {studyVariables.length > 0 && (
-            <div className="variable-section">
-              <h3>🛠️ Biến số nghiên cứu</h3>
-              {studyVariables.map((v) => (
-                <div key={v.id} className="floating-group variable-field">
-                  <label htmlFor={`variable-${v.id}`} className="variable-label">{v.description || v.name}</label>
-              
-                  {v.variable_type === 'boolean' ? (
-                    <select
-                      id={`variable-${v.id}`}
-                      value={variableValues[v.id] || ""}
-                      onChange={(e) => handleVariableChange(v.id, e.target.value)}
-                      required={v.required}
-                    >
-                      <option value="">Chọn</option>
-                      <option value="Yes">Có</option>
-                      <option value="No">Không</option>
-                    </select>
-                  ) : v.variable_type === 'multiselect' ? (
-                    <MultiSelectCheckboxGroup
-                      options={v.options?.split(',') || []}
-                      selectedValues={variableValues[v.id] || []}
-                      onChange={(vals) => handleVariableChange(v.id, vals)}
-                      required={v.required}
-                    />
-                  ) : (
-                    <input
-                      id={`variable-${v.id}`}
-                      type={v.variable_type === 'number' || v.variable_type === 'integer' ? 'number' : 'text'}
-                      value={variableValues[v.id] || ""}
-                      onChange={(e) => handleVariableChange(v.id, e.target.value)}
-                      required={v.required}
-                    />
-                  )}
-                </div>
-              ))}
-                    </div>
-          )}
+  <div className="variable-section">
+    <h3>🛠️ Biến số nghiên cứu</h3>
+
+    {studyVariables.map((v) => (
+      <div key={v.id} className="floating-group variable-field">
+        <label htmlFor={`variable-${v.id}`} className="variable-label">
+          {v.description || v.name}
+        </label>
+
+        {v.variable_type === 'boolean' ? (
+          <select
+            id={`variable-${v.id}`}
+            value={variableValues[v.id] || ""}
+            onChange={(e) => handleVariableChange(v.id, e.target.value)}
+            required={v.required}
+          >
+            <option value="">Chọn</option>
+            <option value="Yes">Có</option>
+            <option value="No">Không</option>
+          </select>
+        ) : v.variable_type === 'multiselect' ? (
+          <MultiSelectCheckboxGroup
+            options={v.options?.split(',') || []}
+            selectedValues={variableValues[v.id] || []}
+            onChange={(vals) => handleVariableChange(v.id, vals)}
+            required={v.required}
+          />
+        ) : (
+          <input
+            id={`variable-${v.id}`}
+            type={(v.variable_type === 'number' || v.variable_type === 'integer') ? 'number' : 'text'}
+            value={variableValues[v.id] || ""}
+            onChange={(e) => handleVariableChange(v.id, e.target.value)}
+            required={v.required}
+          />
+        )}
+      </div> // ✅ closes each variable block
+    ))}
+
+  </div> // ✅ closes the entire .variable-section
+)} // ✅ closes the {studyVariables.length > 0 && (...)}
+
+
+
           {loading && (
             <div className="spinner-container">
               <div className="spinner"></div>
