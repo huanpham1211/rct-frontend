@@ -7,16 +7,10 @@ const MultiSelectCheckboxGroup = ({
   selectedValues = [],
   onChange,
   disabled = false,
+  required = false,
+  fieldName = '',
 }) => {
-  const handleToggle = (value) => {
-    let updated = [...selectedValues];
-    if (updated.includes(value)) {
-      updated = updated.filter((v) => v !== value);
-    } else {
-      updated.push(value);
-    }
-    onChange(updated);
-  };
+  const showError = required && selectedValues.length === 0;
 
   return (
     <div className="checkbox-group-container">
@@ -26,17 +20,30 @@ const MultiSelectCheckboxGroup = ({
           <label key={idx} className={`checkbox-option ${disabled ? 'disabled' : ''}`}>
             <input
               type="checkbox"
+              name={fieldName}
               value={val}
               checked={selectedValues.includes(val)}
-              onChange={() => handleToggle(val)}
+              onChange={() => {
+                let updated = [...selectedValues];
+                if (updated.includes(val)) {
+                  updated = updated.filter((v) => v !== val);
+                } else {
+                  updated.push(val);
+                }
+                onChange(updated);
+              }}
               disabled={disabled}
             />
             <span>{val}</span>
           </label>
         );
       })}
+      {showError && (
+        <p className="error-text">Bạn cần chọn ít nhất một lựa chọn.</p>
+      )}
     </div>
   );
 };
+
 
 export default MultiSelectCheckboxGroup;
