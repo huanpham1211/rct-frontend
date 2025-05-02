@@ -38,6 +38,13 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
     const [day, month, year] = ddmmyyyy.split('/');
     return `${year}-${month}-${day}`;
   };
+const parseDateString = (dateStr) => {
+  try {
+    return parse(dateStr, 'yyyy-MM-dd', new Date());
+  } catch {
+    return null;
+  }
+};
 
   useEffect(() => {
     if (studyId) {
@@ -320,13 +327,16 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
 
           <div className="floating-group">
             <label>Ngày đồng ý tham gia</label>
-            <input
-              type="date"
-              name="consent_date"
-              placeholder=" "
-              value={formData.consent_date}
-              onChange={handleChange}
-              required
+            <DatePicker
+                id="consent_date"
+                selected={formData.consent_date ? parseDateString(formData.consent_date) : null}
+                onChange={(date) => {
+                  const formatted = format(date, 'yyyy-MM-dd');
+                  setFormData((prev) => ({ ...prev, consent_date: formatted }));
+                }}
+                dateFormat="dd/MM/yyyy"
+                placeholderText="dd/MM/yyyy"
+                className="datepicker-input"
             />
           </div>
           <div className="floating-group">
