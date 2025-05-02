@@ -29,29 +29,24 @@
 
 .floating-group {
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
 }
 
 .floating-group input,
-.floating-group textarea,
-.floating-group select {
+.floating-group select,
+.floating-group textarea {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background: white;
-  font-size: 16px;
+  padding: 10px;
+  box-sizing: border-box;
+  font-size: 1rem;
 }
 
+
 .floating-group label {
-  position: absolute;
-  top: -10px;
-  left: 12px;
-  background: white;
-  padding: 0 4px;
-  font-size: 14px;
-  color: #777;
-  pointer-events: none;
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+  color: #444;
 }
 
 .para-input {
@@ -82,15 +77,16 @@
   font-size: 18px;
 }
 
-.variable-section {
-  margin-top: 30px;
-  padding-top: 10px;
-  border-top: 2px dashed #ccc;
+variable-section {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ccc;
 }
 
 .variable-field {
-  margin-top: 12px;
+  margin-bottom: 1.5rem;
 }
+
 
 .variable-label {
   font-weight: bold;
@@ -100,6 +96,14 @@
 
 select[multiple] {
   height: 100px;
+  background: #fafafa;
+}
+
+/* Fix clipping in multiselect checkbox group */
+.multiselect-checkbox-group {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
   background: #fafafa;
 }
 
@@ -116,28 +120,43 @@ select[multiple] {
   color: #2ecc71;
   text-align: center;
 }
-.spinner-container {
+
+.checkbox-grid {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.checkbox-option {
+  display: flex;
   align-items: center;
-  margin: 20px 0;
+  gap: 0.3rem;
+  min-width: 120px;
+}
+
+/* Spinner and button layout */
+.spinner-container {
+  text-align: center;
+  margin: 1.5rem 0;
 }
 
 .spinner {
-  width: 40px;
-  height: 40px;
-  border: 5px solid #d3d3d3;
-  border-top: 5px solid #3498db;
+  width: 24px;
+  height: 24px;
+  margin: 0 auto;
+  border: 4px solid #ccc;
+  border-top: 4px solid #2c3e50;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin-bottom: 8px;
 }
 
 .spinner-text {
-  font-size: 14px;
-  color: #3498db;
-  font-weight: bold;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #555;
 }
+
 button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
