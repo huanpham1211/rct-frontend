@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import './PatientFormModal.css';
 import MultiSelectCheckboxGroup from './MultiSelectCheckboxGroup';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { parse, format } from 'date-fns';
 
 const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
   const [formData, setFormData] = useState({
@@ -229,13 +232,16 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
 
           <div className="floating-group">
               <label>Ngày sinh</label>
-            <input
-              type="date"
-              name="dob"
-              placeholder=" "
-              value={formData.dob}
-              onChange={(e) => handleChange(e)}
-              required
+            <DatePicker
+              id="dob"
+              selected={formData.dob ? parse(formData.dob, 'yyyy-MM-dd', new Date()) : null}
+              onChange={(date) => {
+                const formatted = format(date, 'yyyy-MM-dd'); // store in ISO for backend
+                setFormData((prev) => ({ ...prev, dob: formatted }));
+              }}
+              dateFormat="dd/MM/yyyy"
+              placeholderText="dd/MM/yyyy"
+              className="datepicker-input"
             />
           </div>
 
