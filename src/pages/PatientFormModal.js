@@ -223,11 +223,12 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
 
           {/* Basic Info */}
           <div className="floating-group">
+              <label>Họ và tên</label>
             <input type="text" name="name" placeholder=" " value={formData.name} onChange={handleChange} required />
-            <label>Họ và tên</label>
           </div>
 
           <div className="floating-group">
+              <label>Ngày sinh</label>
             <input
               type="date"
               name="dob"
@@ -236,17 +237,16 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
               onChange={(e) => handleChange(e)}
               required
             />
-            <label>Ngày sinh</label>
           </div>
 
           <div className="floating-group">
+            <label>Giới tính</label>
             <select name="sex" value={formData.sex} onChange={handleChange} required>
               <option value=""> </option>
               <option value="Nam">Nam</option>
               <option value="Nữ">Nữ</option>
               <option value="Khác">Khác</option>
             </select>
-            <label>Giới tính</label>
           </div>
 
           {/* PARA only for Female */}
@@ -267,6 +267,7 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
 
           {/* Other Fields */}
           <div className="floating-group">
+            <label>Điện thoại *</label>
             <input
               type="tel"
               name="phone"
@@ -277,10 +278,10 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
               pattern="\d{10}"
               title="Số điện thoại phải gồm 10 chữ số"
             />
-            <label>Điện thoại *</label>
           </div>
                 
           <div className="floating-group">
+            <label>Email</label>
             <input
               type="email"
               name="email"
@@ -290,29 +291,29 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
               pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
               title="Địa chỉ email không hợp lệ"
             />
-            <label>Email</label>
           </div>
 
           <div className="floating-group">
-            <input type="text" name="ethnicity" placeholder=" " value={formData.ethnicity} onChange={handleChange} />
             <label>Dân tộc</label>
+            <input type="text" name="ethnicity" placeholder=" " value={formData.ethnicity} onChange={handleChange} />
           </div>
 
           <div className="floating-group">
+           <label>Tình trạng thai kỳ</label>
             <select name="pregnancy_status" value={formData.pregnancy_status} onChange={handleChange}>
               <option value=""> </option>
               <option value="Mang thai">Mang thai</option>
               <option value="Không">Không</option>
             </select>
-            <label>Tình trạng thai kỳ</label>
           </div>
 
           <div className="floating-group">
-            <textarea name="notes" placeholder=" " value={formData.notes} onChange={handleChange} />
             <label>Ghi chú</label>
+            <textarea name="notes" placeholder=" " value={formData.notes} onChange={handleChange} />
           </div>
 
           <div className="floating-group">
+            <label>Ngày đồng ý tham gia</label>
             <input
               type="date"
               name="consent_date"
@@ -321,16 +322,15 @@ const PatientFormModal = ({ studyId, siteId, patientId = null, onClose }) => {
               onChange={handleChange}
               required
             />
-            <label>Ngày đồng ý tham gia</label>
           </div>
           <div className="floating-group">
+            <label>Trạng thái ghi danh</label>
             <select name="enrollment_status" value={formData.enrollment_status} onChange={handleChange}>
               <option value=""> </option>
               <option value="Enrolled">Đã ghi danh</option>
               <option value="Screened">Đã sàng lọc</option>
               <option value="Withdrawn">Đã rút</option>
             </select>
-            <label>Trạng thái ghi danh</label>
           </div>
 
           {studyVariables.length > 0 && (
