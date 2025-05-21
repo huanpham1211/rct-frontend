@@ -9,7 +9,9 @@ const StudyVariableModal = ({ studyId, onClose, onSuccess }) => {
     name: "",
     variable_type: "text",
     required: false,
-    options: ""
+    options: "",
+    description: "",     // (add if not already there)
+    entry_stage: "initial" // ✅ NEW default value
   });
 
   const token = localStorage.getItem("token");
@@ -88,6 +90,14 @@ const StudyVariableModal = ({ studyId, onClose, onSuccess }) => {
             <option value="multiselect">Multi-Select</option>
             <option value="date">Date</option>
           </select>
+          <select
+            value={newVar.entry_stage}
+            onChange={(e) => setNewVar({ ...newVar, entry_stage: e.target.value })}
+          >
+            <option value="initial">📋 Ban đầu</option>
+            <option value="lab">🧪 Xét nghiệm</option>
+            <option value="checkup">👨‍⚕️ Tái khám</option>
+          </select>
           <input
             placeholder="Tùy chọn (cách nhau bởi dấu phẩy nếu là select)"
             value={newVar.options}
@@ -114,6 +124,9 @@ const StudyVariableModal = ({ studyId, onClose, onSuccess }) => {
               <div><strong>{v.name}</strong> <span className="text-gray-600"></span></div> {/* ✅ Show description if available */}
               <span className="ml-2 text-gray-600 text-sm">({v.description})</span> {/* optional: show internal name */}
               <span className="ml-2">📄 {v.variable_type}</span>
+              <span className="ml-2 text-blue-700 italic">
+                [{v.entry_stage === "lab" ? "Xét nghiệm" : v.entry_stage === "checkup" ? "Tái khám" : "Ban đầu"}]
+              </span>
               {v.required && <span className="ml-2 text-red-600">⭐ Bắt buộc</span>}
               {v.options && <span> – Tuỳ chọn: {v.options}</span>}
               <button className="unassign-btn ml-2" onClick={() => handleDelete(v.id)}>❌</button>
