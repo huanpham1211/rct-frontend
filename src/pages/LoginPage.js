@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'; // ✅ Import this
 import './LoginPage.css';
 import { jwtDecode } from 'jwt-decode';
 
+const API_BASE = process.env.REACT_APP_API; // ✅ Use environment variable for API base URL
 
 const token = localStorage.getItem('token');
 if (token) {
@@ -24,7 +25,7 @@ const LoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const res = await fetch('https://rct-backend-1erq.onrender.com/login', {
+    const res = await fetch(`${API_BASE}/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
