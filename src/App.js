@@ -15,10 +15,17 @@ import StudyPage from './pages/StudyPage';
 
 
 function App() {
+  const token = localStorage.getItem("token");
+
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        <Route
+        path="/"
+        element={
+          token ? <Navigate to="/dashboard" replace /> : <LoginPage />
+        }
+      />
         <Route
           path="/dashboard"
           element={
